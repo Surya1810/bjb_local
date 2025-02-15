@@ -47,7 +47,7 @@
             </ul>
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
-                <h4 style="color: #135581"><strong>bjb</strong> Document Tracker</h4>
+                <h4 style="color: #fff"><strong>bjb</strong> Document Tracker</h4>
             </ul>
         </nav>
 
@@ -63,8 +63,8 @@
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex align-items-center">
                     <div class="image">
-                        <img src="{{ asset('assets/img/profile/' . Auth::user()->avatar) }}"
-                            class="img-circle elevation-2 " alt="User Image">
+                        <img src="{{ asset('assets/img/profile/' . Auth::user()->avatar) }}" class="img-circle"
+                            alt="User Image">
                     </div>
                     <div class="info">
                         <a href="{{ route('profile.edit') }}"
@@ -162,7 +162,7 @@
                             </a>
                         </li>
 
-                        <li class="nav-item mt-5">
+                        <li class="nav-item mt-3">
                             <a href="{{ route('logout') }}"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                                 class="nav-link logout">

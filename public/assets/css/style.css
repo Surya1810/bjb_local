@@ -123,7 +123,7 @@ body::-webkit-scrollbar {
 }
 
 /* Styling sidebar */
-.sidebar {
+.main-sidebar {
     background-color: #135581 !important;
 }
 
