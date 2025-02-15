@@ -138,7 +138,7 @@ body::-webkit-scrollbar {
 }
 
 .brand-link img {
-    max-height: 100px; /* Mencegah stretching */
+    max-height: 80px; /* Mencegah stretching */
     width: auto;
     transition: all 0.3s ease-in-out;
 }
@@ -151,5 +151,5 @@ body::-webkit-scrollbar {
 }
 
 .sidebar-collapse .brand-link img {
-    max-height: 70px; /* Mengecil saat collapsed */
+    max-height: 30px; /* Mengecil saat collapsed */
 }
