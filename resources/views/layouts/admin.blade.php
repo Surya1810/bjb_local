@@ -96,7 +96,7 @@
                         <li class="nav-header mt-3 text-white">DOCUMENT</li>
 
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('document.index') }}" class="nav-link">
                                 <i class="nav-icon fa-regular fa-folder-open"></i>
                                 <p>
                                     Document List
@@ -104,7 +104,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('agunan.index') }}" class="nav-link">
                                 <i class="nav-icon fa-regular fa-file"></i>
                                 <p>
                                     Agunan List
@@ -138,7 +138,7 @@
 
                         <li class="nav-header mt-3 text-white">DATA</li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('user.index') }}" class="nav-link">
                                 <i class="nav-icon fa-solid fa-user"></i>
                                 <p>
                                     User List
@@ -153,19 +153,32 @@
                                 </p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa-solid fa-location-dot"></i>
+                                <p>
+                                    Location
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item mt-5">
+                            <a href="{{ route('logout') }}"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                                class="nav-link logout">
+                                <i class="nav-icon fa-solid fa-power-off"></i>
+                                <p>
+                                    Log Out
+                                </p>
+                            </a>
+
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </li>
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
-            </div>
-            <div class="sidebar-custom text-center">
-                <a class="btn btn-sm btn-danger rounded-partner" href="{{ route('logout') }}"
-                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <i class="fa-solid fa-power-off"></i>
-                </a>
-
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                    @csrf
-                </form>
             </div>
             <!-- /.sidebar -->
         </aside>

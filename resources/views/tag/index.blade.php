@@ -40,10 +40,13 @@
                                     <h3 class="card-title">Tag RFID List</h3>
                                 </div>
                                 <div class="col-6">
-                                    <button type="button" class="float-right btn btn-sm btn-primary rounded-partner ml-2"
-                                        data-toggle="modal" data-target="#injectTag">
-                                        <i class="fa-solid fa-plus"></i> Inject
-                                    </button>
+                                    @if (auth()->user()->role_id == 1)
+                                        <button type="button"
+                                            class="float-right btn btn-sm btn-primary rounded-partner ml-2"
+                                            data-toggle="modal" data-target="#injectTag">
+                                            <i class="fa-solid fa-plus"></i> Inject
+                                        </button>
+                                    @endif
                                 </div>
                             </div>
                         </div>

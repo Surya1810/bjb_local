@@ -102,6 +102,13 @@ body::-webkit-scrollbar {
     font-weight: bold;
 }
 
+.nav-pills .nav-link.logout,
+.nav-pills .show > .nav-link {
+    background-color: #dc3545 !important;
+    color: #fff !important;
+    font-weight: bold;
+}
+
 /* Styling navbar */
 .bg-primary {
     background-color: #135581 !important;
@@ -125,6 +132,7 @@ body::-webkit-scrollbar {
 }
 
 .sidebar-custom {
+    margin-bottom: 100 !important ;
     background-color: #135581 !important;
     border-top: #135581 !important;
 }

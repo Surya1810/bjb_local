@@ -23,7 +23,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-3 col-6">
-                    <a href="#">
+                    <a href="{{ route('user.index') }}">
                         <div class="small-box bg-primary">
                             <div class="inner">
                                 <h3>{{ $users }}</h3>
@@ -38,7 +38,7 @@
                     </a>
                 </div>
                 <div class="col-lg-3 col-6">
-                    <a href="#">
+                    <a href="{{ route('document.index') }}">
                         <div class="small-box bg-primary">
                             <div class="inner">
                                 <h3>{{ $documents }}</h3>
@@ -53,7 +53,7 @@
                     </a>
                 </div>
                 <div class="col-lg-3 col-6">
-                    <a href="#">
+                    <a href="{{ route('agunan.index') }}">
                         <div class="small-box bg-primary">
                             <div class="inner">
                                 <h3>{{ $agunans }}</h3>

@@ -83,6 +83,13 @@ class TagController extends Controller
      */
     public function destroy($rfid_number)
     {
-        //   
+        $tag = Tag::where('rfid_number', $rfid_number)->first();
+
+        if ($tag->document == null) {
+            $tag->delete();
+            return redirect()->back()->with(['pesan' => 'Tag deleted successfully', 'level-alert' => 'alert-danger']);
+        } else {
+            return redirect()->back()->with(['pesan' => 'Tag used on document', 'level-alert' => 'alert-danger']);
+        }
     }
 }

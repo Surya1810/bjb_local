@@ -14,6 +14,6 @@ class Tag extends Model
 
     public function document()
     {
-        // return $this->hasOne(Asset::class, 'tag_id');
+        return $this->hasOne(Document::class, 'rfid_number');
     }
 }
