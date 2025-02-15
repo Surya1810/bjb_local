@@ -153,3 +153,9 @@ body::-webkit-scrollbar {
 .sidebar-collapse .brand-link img {
     max-height: 30px; /* Mengecil saat collapsed */
 }
+
+.table thead th {
+    background-color: #135581 !important; /* Warna biru */
+    color: #efcb13 !important; /* Teks kuning */
+    text-align: center;
+}

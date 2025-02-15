@@ -61,7 +61,7 @@
                                 <strong>Agunan</strong>
                             </div>
                             <div class="icon">
-                                <i class="fas fa-regular fa-folder-open"></i>
+                                <i class="fas fa-regular fa-file"></i>
                             </div>
                             <span class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></span>
                         </div>
@@ -74,7 +74,7 @@
                             <div class="inner">
                                 <h3>{{ $tags }}</h3>
 
-                                <strong>Tag RFID</strong>
+                                <strong>Tag RFID Remaining</strong>
                             </div>
                             <div class="icon">
                                 <i class="fas fa-solid fa-tags"></i>

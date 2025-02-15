@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -29,7 +30,7 @@ class HomeController extends Controller
         $users = User::all()->except(1)->count();
         $documents = 0;
         $agunans = 0;
-        $tags = 0;
+        $tags = Tag::where('status', 'available')->count();
 
         return view('home.dashboard', compact('users', 'documents', 'agunans', 'tags'));
     }
