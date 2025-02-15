@@ -87,3 +87,69 @@ body::-webkit-scrollbar {
 .bg-danger-2 {
     background-color: #ea9999;
 }
+
+/* Style BJB */
+.nav-pills .nav-link {
+    border-radius: 20px;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+    background-color: #efcb13 !important;
+    color: #135581 !important;
+    font-weight: bold;
+}
+
+/* Styling navbar */
+.bg-primary {
+    background-color: #135581 !important;
+}
+.bg-bjb {
+    background: linear-gradient(
+        to right,
+        #135581 0% 50%,
+        #24aae1 50% 75%,
+        #efcb13 75% 100%
+    ) !important;
+}
+
+/* Styling sidebar */
+.sidebar {
+    background-color: #135581 !important;
+}
+
+.sidebar .nav-link {
+    color: #fff !important;
+}
+
+.sidebar-custom {
+    background-color: #135581 !important;
+    border-top: #135581 !important;
+}
+
+.brand-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px; /* Lebih tinggi */
+    padding: 10px;
+}
+
+.brand-link img {
+    max-height: 100px; /* Mencegah stretching */
+    width: auto;
+    transition: all 0.3s ease-in-out;
+}
+
+.sidebar {
+    margin-top: 100px !important;
+}
+.sidebar-collapse .sidebar {
+    margin-top: 55px !important;
+}
+
+.sidebar-collapse .brand-link img {
+    max-height: 70px; /* Mengecil saat collapsed */
+}

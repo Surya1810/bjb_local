@@ -33,28 +33,29 @@
     @stack('css')
 </head>
 
-<body class="hold-transition sidebar-mini layout-navbar-fixed layout-fixed sidebar-collapse">
+<body class="hold-transition sidebar-mini layout-navbar-fixed layout-fixed">
     <div class="wrapper">
 
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light text-sm">
+        <nav class="main-header navbar navbar-expand navbar-dark bg-bjb border-bottom-0">
             <!-- Left navbar links -->
-            <ul class="navbar-nav d-block d-md-none">
+            <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
                             class="fas fa-bars"></i></a>
                 </li>
             </ul>
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ml-auto">
+                <h4 style="color: #135581"><strong>bjb</strong> Document Tracker</h4>
+            </ul>
         </nav>
 
         <!-- Main Sidebar Container -->
-        <aside class="main-sidebar main-sidebar-custom sidebar-dark-primary elevation-4">
+        <aside class="main-sidebar main-sidebar-custom sidebar-dark-warning">
             <!-- Brand Logo -->
-            <a href="{{ route('dashboard') }}" class="brand-link logo-switch border-0 shadow-bottom">
-                <img src="{{ asset('assets/logo/main_icon.png') }}" alt="Partner_logo"
-                    class="brand-image-xl logo-xs text-sm">
-                <img src="{{ asset('assets/logo/main-light.png') }}" alt="Partner_logo"
-                    class="brand-image-xs logo-xl text-sm" style="left: 32px;width: 75%">
+            <a href="{{ route('home') }}" class="brand-link border-0 bg-white">
+                <img src="{{ asset('assets/logo/main.png') }}" alt="bjb">
             </a>
 
             <!-- Sidebar -->
@@ -67,156 +68,88 @@
                     </div>
                     <div class="info">
                         <a href="{{ route('profile.edit') }}"
-                            class="d-block link-warning"><strong>{{ Auth::user()->username }}</strong> <br>
+                            class="d-block text-warning"><strong>{{ Auth::user()->name }}</strong> <br>
                             <small>{{ auth()->user()->role->name }}</small></a>
                     </div>
                 </div>
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column nav-legacy nav-child-indent" data-widget="treeview"
+                    <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview"
                         role="menu" data-accordion="false">
                         <li class="nav-item">
-                            <a href="{{ route('dashboard') }}" class="nav-link">
+                            <a href="{{ route('home') }}" class="nav-link">
                                 <i class="nav-icon fa-solid fa-house"></i>
                                 <p>
                                     Home
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-header mt-3">OFFICE</li>
-                        <li class="nav-item">
-                            <a href="{{ route('employee.index') }}" class="nav-link">
-                                <i class="nav-icon fa-solid fa-id-card"></i>
-                                <p>
-                                    Employee
-                                </p>
-                            </a>
-                        </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fa-solid fa-chart-pie"></i>
-
+                                <i class="nav-icon fa-solid fa-chart-simple"></i>
                                 <p>
-                                    Finance
-                                    <i class="right fas fa-angle-left"></i>
+                                    Report
                                 </p>
                             </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('finance.index') }}" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Report</p>
-                                    </a>
-                                    <a href="{{ route('application.index') }}" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Application</p>
-                                    </a>
-                                    <a href="{{ route('coming_soon') }}" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Expense</p>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
+
+                        <li class="nav-header mt-3 text-white">DOCUMENT</li>
+
                         <li class="nav-item">
-                            <a href="{{ route('document.index') }}" class="nav-link">
+                            <a href="#" class="nav-link">
                                 <i class="nav-icon fa-regular fa-folder-open"></i>
-                                <i class=""></i>
                                 <p>
-                                    Document
-                                </p>
-                            </a>
-                        </li>
-
-                        <li class="nav-header mt-3">MANAGEMENT</li>
-                        <li class="nav-item">
-                            <a href="{{ route('project.index') }}" class="nav-link">
-                                <i class="nav-icon fa-solid fa-helmet-safety"></i>
-                                <p>
-                                    Project
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('coming_soon') }}" class="nav-link">
-                                <i class="nav-icon fa-solid fa-list-check"></i>
-                                <p>
-                                    Daily Task
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('coming_soon') }}" class="nav-link">
-                                <i class="nav-icon fa-regular fa-calendar"></i>
-                                <p>
-                                    Schedule
+                                    Document List
                                 </p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fa-solid fa-clipboard-list"></i>
+                                <i class="nav-icon fa-regular fa-file"></i>
+                                <p>
+                                    Agunan List
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa-solid fa-magnifying-glass"></i>
+                                <p>
+                                    Scan Room
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa-solid fa-clock-rotate-left"></i>
+                                <p>
+                                    Changes History
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa-solid fa-clipboard-check"></i>
+                                <p>
+                                    Document Detail
+                                </p>
+                            </a>
+                        </li>
 
-                                <p>
-                                    Asset
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('asset.index') }}" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Asset List</p>
-                                    </a>
-                                    <a href="{{ route('scan.index') }}" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Scan</p>
-                                    </a>
-                                    <a href="{{ route('tag.index') }}" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>RFID Number</p>
-                                    </a>
-                                    <a href="{{ route('tag.index') }}" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Maintenance</p>
-                                    </a>
-                                    <a href="{{ route('tag.index') }}" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>History</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-header mt-3">DATABASE</li>
+                        <li class="nav-header mt-3 text-white">DATA</li>
                         <li class="nav-item">
-                            <a href="{{ route('client.index') }}" class="nav-link">
-                                <i class="nav-icon fa-regular fa-handshake"></i>
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa-solid fa-user"></i>
                                 <p>
-                                    Client
+                                    User List
                                 </p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('supplier.index') }}" class="nav-link">
-                                <i class="nav-icon fa-solid fa-warehouse"></i>
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa-solid fa-tags"></i>
                                 <p>
-                                    Supplier
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('partner.index') }}" class="nav-link">
-                                <i class="nav-icon fa-regular fa-address-book"></i>
-                                <p>
-                                    Partner
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('coming_soon') }}" class="nav-link">
-                                <i class="nav-icon fa-solid fa-box"></i>
-                                <p>
-                                    Product
+                                    Tag RFID
                                 </p>
                             </a>
                         </li>
@@ -224,7 +157,7 @@
                 </nav>
                 <!-- /.sidebar-menu -->
             </div>
-            <div class="sidebar-custom border-dark text-center">
+            <div class="sidebar-custom text-center">
                 <a class="btn btn-sm btn-danger rounded-partner" href="{{ route('logout') }}"
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <i class="fa-solid fa-power-off"></i>
