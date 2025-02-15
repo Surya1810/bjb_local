@@ -1,6 +1,5 @@
 * {
     scroll-behavior: smooth;
-    font-family: "Figtree", sans-serif;
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
 }
@@ -35,14 +34,6 @@ body::-webkit-scrollbar {
     color: #fff;
     border-color: rgba(0, 85, 255, 0.75);
     box-shadow: 0 0 0 0.35rem rgba(0, 85, 255, 0.25);
-}
-
-/* Asset */
-.badge-orange {
-    /* border: 1px solid;
-    border-color: rgba(241, 93, 75, 1); */
-    background-color: #ff9130;
-    color: #fff;
 }
 
 /* Nav Rounded */
@@ -95,11 +86,4 @@ body::-webkit-scrollbar {
 }
 .bg-danger-2 {
     background-color: #ea9999;
-}
-
-.sidebar-collapse
-    .main-sidebar:hover
-    .nav-sidebar.nav-child-indent
-    .nav-treeview {
-    padding-left: 1rem;
 }
