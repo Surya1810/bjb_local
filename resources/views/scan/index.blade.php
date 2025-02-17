@@ -81,7 +81,7 @@
                                         <th rowspan="2" class="align-middle">
                                             Nilai
                                         </th>
-                                        <th colspan="3" class="align-middle">
+                                        <th colspan="4" class="align-middle">
                                             Location
                                         </th>
                                     </tr>
@@ -108,7 +108,11 @@
                                 </div>
                                 <div class="col-6">
                                     <small class="float-right">Total :<strong id="totalRFID">0</strong>
-                                        last checked: <strong>{{ !empty($last_checked->created_at) }}</strong>
+                                        last checked: <strong>
+                                            @isset($last_checked->created_at)
+                                                {{ $last_checked->created_at }}
+                                            @endisset
+                                        </strong>
                                     </small>
                                 </div>
                             </div>

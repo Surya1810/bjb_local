@@ -85,7 +85,11 @@
                                                 @endif
                                             </td>
                                             <td>{{ $rfid->created_at->format('j F, Y') }}</td>
-                                            <td></td>
+                                            <td>
+                                                @isset($rfid->document->no_dokumen)
+                                                    {{ $rfid->document->no_dokumen }}
+                                                @endisset
+                                            </td>
                                             <td>
                                                 @if ($rfid->status === 'available')
                                                     <button class="btn btn-sm btn-danger rounded-partner"
