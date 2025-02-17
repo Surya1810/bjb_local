@@ -61,7 +61,7 @@
                                     <tr>
                                         <th rowspan="2" class="align-middle">RFID Number</th>
                                         <th colspan="8">Nasabah</th>
-                                        <th colspan="6">Info</th>
+                                        <th colspan="7">Info</th>
                                         <th colspan="4">Location</th>
                                         <th rowspan="2" class="align-middle" style="width: 5%">Action</th>
                                     </tr>
@@ -75,6 +75,7 @@
                                         <th>Instansi</th>
                                         <th>Alamat</th>
                                         <th>Dokumen</th>
+                                        <th>Segmen</th>
                                         <th>Cabang</th>
                                         <th>Tanggal Akad</th>
                                         <th>Tanggal Jatuh Tempo</th>
@@ -388,10 +389,10 @@
                                     <select class="form-control baris" style="width: 100%;" id="baris"
                                         name="baris" required>
                                         <option></option>
-                                        @foreach ($tags as $tag)
-                                            <option value="{{ $tag->rfid_number }}"
-                                                {{ old('tag') == $tag->rfid_number ? 'selected' : '' }}>
-                                                {{ $tag->rfid_number }}
+                                        @foreach ($rows as $row)
+                                            <option value="{{ $row->number }}"
+                                                {{ old('baris') == $row->number ? 'selected' : '' }}>
+                                                Baris {{ $row->number }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -408,10 +409,10 @@
                                     <select class="form-control rak" style="width: 100%;" id="rak" name="rak"
                                         required>
                                         <option></option>
-                                        @foreach ($tags as $tag)
-                                            <option value="{{ $tag->rfid_number }}"
-                                                {{ old('tag') == $tag->rfid_number ? 'selected' : '' }}>
-                                                {{ $tag->rfid_number }}
+                                        @foreach ($racks as $rack)
+                                            <option value="{{ $rack->number }}"
+                                                {{ old('rak') == $rack->number ? 'selected' : '' }}>
+                                                Rak {{ $rack->number }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -429,6 +430,20 @@
                                         name="box" placeholder="Tulis box" value="{{ old('box') }}" required
                                         type="text">
                                     @error('box')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="keterangan" class="mb-0 form-label col-form-label-sm">Keterangan <small
+                                            class="text-danger">*Optional</small></label>
+                                    <input class="form-control @error('keterangan') is-invalid @enderror" id="keterangan"
+                                        name="keterangan" placeholder="Tulis keterangan "
+                                        value="{{ old('keterangan') }}" type="text">
+                                    @error('keterangan')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>

@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('instansi');
 
             $table->string('no_dokumen');
-            $table->string('segmen');
+            $table->enum('segmen', ['Konsumer', 'UMKM', 'Korporasi', 'KPR', 'Komersial']);
             $table->string('cabang');
             $table->date('akad');
             $table->date('jatuh_tempo');

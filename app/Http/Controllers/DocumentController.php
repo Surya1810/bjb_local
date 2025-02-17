@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Document;
+use App\Models\Location;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 
@@ -15,8 +16,10 @@ class DocumentController extends Controller
     {
         $documents = Document::all();
         $tags = Tag::where('status', 'available')->get();
+        $rows = Location::where('for', 'baris')->get();
+        $racks = Location::where('for', 'rak')->get();
 
-        return view('document.index', compact('documents', 'tags'));
+        return view('document.index', compact('documents', 'tags', 'rows', 'racks'));
     }
 
     /**

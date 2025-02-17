@@ -103,14 +103,14 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="{{ route('agunan.index') }}" class="nav-link">
                                 <i class="nav-icon fa-regular fa-file"></i>
                                 <p>
                                     Agunan List
                                 </p>
                             </a>
-                        </li>
+                        </li> --}}
                         <li class="nav-item">
                             <a href="{{ route('scan.index') }}" class="nav-link">
                                 <i class="nav-icon fa-solid fa-magnifying-glass"></i>
@@ -153,14 +153,14 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fa-solid fa-location-dot"></i>
                                 <p>
                                     Location
                                 </p>
                             </a>
-                        </li>
+                        </li> --}}
 
                         <li class="nav-item mt-3">
                             <a href="{{ route('logout') }}"
