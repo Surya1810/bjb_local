@@ -171,6 +171,19 @@ body::-webkit-scrollbar {
     ) !important;
 }
 
+.btn-bjb {
+    background-color: #efcb13 !important;
+    color: #135581 !important;
+    border: 2px solid #efcb13 !important;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Hover Effect */
+.btn-bjb:hover {
+    background-color: #d6b317 !important;
+    color: white !important;
+    border-color: #d6b317 !important;
+}
 /* Styling sidebar */
 .main-sidebar {
     background-color: #135581 !important;

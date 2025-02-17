@@ -18,8 +18,6 @@
     <meta name="apple-mobile-web-app-title" content="Docutrack" />
     <link rel="manifest" href="{{ asset('favicons/site.webmanifest') }}" />
 
-    <!-- Bootstrap -->
-
     <!-- Sweetalert2 -->
     <link rel="stylesheet" href="{{ asset('assets/adminLTE/plugins/sweetalert2/sweetalert2.min.css') }}">
     <!-- Theme style -->
