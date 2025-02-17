@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('rfid_number')->unique()->references('rfid_number')->on('tags');
             $table->string('cif');
-            $table->string('no_dokumen');
             $table->integer('nik_nasabah');
             $table->string('nama_nasabah');
             $table->text('alamat_nasabah');
@@ -23,10 +22,22 @@ return new class extends Migration
             $table->string('pekerjaan_nasabah');
             $table->integer('rekening_nasabah');
             $table->string('instansi');
+
+            $table->string('no_dokumen');
             $table->string('cabang');
             $table->date('akad');
+            $table->date('jatuh_tempo');
+            $table->integer('lama');
             $table->decimal('pinjaman', 15, 2);
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+
+            $table->string('room');
+            $table->string('row');
+            $table->string('rack');
+            $table->string('box');
+
+            $table->string('status')->nullable(); //dipinjam, dijual, dihibahkan dsb
+            $table->text('desc')->nullable(); //kolom tambahan bila diperlukan
+            $table->boolean('is_there')->default(true);
             $table->timestamps();
         });
     }
