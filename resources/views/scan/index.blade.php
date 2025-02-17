@@ -58,25 +58,38 @@
                                             RFID
                                         </th>
                                         <th rowspan="2" class="align-middle">
-                                            Code
+                                            CIF
                                         </th>
                                         <th rowspan="2" class="align-middle">
-                                            Name
+                                            NIK
                                         </th>
                                         <th rowspan="2" class="align-middle">
-                                            Condition
+                                            Rekening
                                         </th>
                                         <th rowspan="2" class="align-middle">
-                                            PIC
+                                            Nama
+                                        </th>
+                                        <th rowspan="2" class="align-middle">
+                                            Cabang
+                                        </th>
+                                        <th rowspan="2" class="align-middle">
+                                            Dokumen
+                                        </th>
+                                        <th rowspan="2" class="align-middle">
+                                            Segmen
+                                        </th>
+                                        <th rowspan="2" class="align-middle">
+                                            Nilai
                                         </th>
                                         <th colspan="3" class="align-middle">
                                             Location
                                         </th>
                                     </tr>
                                     <tr>
-                                        <th>Building</th>
-                                        <th>Floor</th>
-                                        <th>Room</th>
+                                        <th>Ruangan</th>
+                                        <th>Baris</th>
+                                        <th>Rak</th>
+                                        <th>Box</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -95,7 +108,7 @@
                                 </div>
                                 <div class="col-6">
                                     <small class="float-right">Total :<strong id="totalRFID">0</strong>
-                                        last checked: <strong>{{ $last_checked->created_at }}</strong>
+                                        last checked: <strong>{{ !empty($last_checked->created_at) }}</strong>
                                     </small>
                                 </div>
                             </div>

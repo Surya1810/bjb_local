@@ -13,6 +13,6 @@ Route::post('/data', [ScanController::class, 'scan']);
 
 Route::get('/documents', function () {
     return response()->json(
-        Document::with('tag:rfid_number,rfid_number')->orderBy('rfid_number', 'asc')->get()
+        Document::with('tag:rfid_number,rfid_number')->get()
     );
 });

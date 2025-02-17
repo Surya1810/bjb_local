@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('rfid_number')->unique()->references('rfid_number')->on('tags');
             $table->string('cif');
-            $table->integer('nik_nasabah');
+            $table->bigInteger('nik_nasabah');
             $table->string('nama_nasabah');
             $table->text('alamat_nasabah');
-            $table->integer('telp_nasabah');
+            $table->bigInteger('telp_nasabah');
             $table->string('pekerjaan_nasabah');
-            $table->integer('rekening_nasabah');
+            $table->bigInteger('rekening_nasabah');
             $table->string('instansi');
 
             $table->string('no_dokumen');
@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('cabang');
             $table->date('akad');
             $table->date('jatuh_tempo');
-            $table->integer('lama');
+            $table->bigInteger('lama');
             $table->decimal('pinjaman', 15, 2);
 
             $table->string('room');

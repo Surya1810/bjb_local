@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\DocumentsImport;
 use App\Models\Document;
 use App\Models\Location;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DocumentController extends Controller
 {
@@ -99,5 +101,18 @@ class DocumentController extends Controller
     public function destroy(Document $document)
     {
         //
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
+        ]);
+        try {
+            Excel::import(new DocumentsImport, $request->file('file'));
+            return back()->with(['pesan' => 'Assets imported successfully', 'level-alert' => 'alert-success']);
+        } catch (\Exception $e) {
+            return back()->with(['pesan' => $e->getMessage(), 'level-alert' => 'alert-danger']);
+        }
     }
 }

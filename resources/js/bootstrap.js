@@ -79,13 +79,18 @@ function updateDocumentTable(callback = null) {
             let rowNode = documentTable.row.add([
                 document.is_there ? ' <strong>FOUND</strong>' : '<strong>MISSING</strong>',
                 document.rfid_number,
-                document.code,
-                document.name,
-                document.condition,
-                document.user.username,
-                document.gedung,
-                document.lantai,
-                document.ruangan
+                document.cif,
+                document.nik_nasabah,
+                document.rekening_nasabah,
+                document.nama_nasabah,
+                document.cabang,
+                document.no_dokumen,
+                document.segmen,
+                document.pinjaman,
+                document.room,
+                document.row,
+                document.rack,
+                document.box
             ]).node();
 
             if (document.is_there) {

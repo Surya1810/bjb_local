@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
 
     // Document
     Route::resource('document', DocumentController::class);
+    Route::post('/document/import', [DocumentController::class, 'import'])->name('document.import');
 
     // Agunan
     Route::resource('agunan', AgunanController::class);
