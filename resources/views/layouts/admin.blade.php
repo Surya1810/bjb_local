@@ -112,7 +112,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('scan.index') }}" class="nav-link">
                                 <i class="nav-icon fa-solid fa-magnifying-glass"></i>
                                 <p>
                                     Scan Room
