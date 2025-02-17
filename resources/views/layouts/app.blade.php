@@ -19,15 +19,11 @@
     <link rel="manifest" href="{{ asset('favicons/site.webmanifest') }}" />
 
     <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
-    </script>
 
     <!-- Sweetalert2 -->
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <link rel="stylesheet" href="{{ asset('assets/adminLTE/plugins/sweetalert2/sweetalert2.min.css') }}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ asset('assets/adminLTE/dist/css/adminlte.min.css') }}">
     <!-- Our style -->
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 </head>
@@ -39,8 +35,11 @@
 
     <!-- jQuery -->
     <script src="{{ asset('assets/adminLTE/plugins/jquery/jquery.min.js') }}"></script>
-
+    <!-- Bootstrap 4 -->
+    <script src="{{ asset('assets/adminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- Sweetalert2 -->
+    <script src="{{ asset('assets/adminLTE/plugins/sweetalert2/sweetalert2.all.min.js') }}"></script>
+
     <script>
         const Toast = Swal.mixin({
             toast: true,

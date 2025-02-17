@@ -20,7 +20,7 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="{{ asset('assets/FontAwesome/6.2.1/css/all.min.css') }}">
     <!-- Sweetalert2 -->
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="{{ asset('assets/adminLTE/plugins/sweetalert2/sweetalert2.min.css') }}">
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ asset('assets/adminLTE/plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet"
@@ -47,7 +47,7 @@
             </ul>
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
-                <h4 style="color: #fff"><strong>bjb</strong> Document Tracker</h4>
+                <h4 style="color: #000"><strong>bjb</strong> Document Tracker</h4>
             </ul>
         </nav>
 
@@ -196,7 +196,8 @@
                 Your Solution Partner
             </div>
             <!-- Default to the left -->
-            <strong>Copyright &copy; 2024 <a href="https://partnership.co.id">Partnership</a></strong>
+            <strong>Copyright &copy; 2024 <a href="https://partnership.co.id" target="_blank"
+                    class="link-black">Partnership</a></strong>
             All rights
             reserved.
         </footer>
@@ -208,11 +209,10 @@
     <script src="{{ asset('assets/adminLTE/plugins/jquery/jquery.min.js') }}"></script>
     <!-- Bootstrap 4 -->
     <script src="{{ asset('assets/adminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- Sweetalert2 -->
+    <script src="{{ asset('assets/adminLTE/plugins/sweetalert2/sweetalert2.all.min.js') }}"></script>
     <!-- Select2 -->
     <script src="{{ asset('assets/adminLTE/plugins/select2/js/select2.full.min.js') }}"></script>
-    <!-- Toastr -->
-    <script src="{{ asset('assets/adminLTE/plugins/toastr/toastr.min.js') }}"></script>
-
 
     @stack('scripts')
 
@@ -241,9 +241,9 @@
 
     <!-- Sweetalert2 -->
     <script>
-        const Toast = Swal.mixin({
+        var Toast = Swal.mixin({
             toast: true,
-            position: 'top',
+            position: 'top-end',
             iconColor: 'white',
             customClass: {
                 popup: 'colored-toast'

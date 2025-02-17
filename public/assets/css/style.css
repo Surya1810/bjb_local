@@ -190,12 +190,12 @@ body::-webkit-scrollbar {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100px; /* Lebih tinggi */
+    height: 100px;
     padding: 10px;
 }
 
 .brand-link img {
-    max-height: 80px; /* Mencegah stretching */
+    max-height: 80px;
     width: auto;
     transition: all 0.3s ease-in-out;
 }
@@ -208,11 +208,14 @@ body::-webkit-scrollbar {
 }
 
 .sidebar-collapse .brand-link img {
-    max-height: 30px; /* Mengecil saat collapsed */
+    max-height: 30px;
 }
 
 .table thead th {
-    background-color: #135581 !important; /* Warna biru */
-    color: #efcb13 !important; /* Teks kuning */
+    border: 1px solid #b1a415 !important;
+    border-collapse: collapse !important;
+    border-spacing: 0;
+    background-color: #efcb13 !important;
+    color: #135581 !important;
     text-align: center;
 }
