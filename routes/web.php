@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AgunanController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScanController;
@@ -14,6 +15,8 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+Route::get('/password/change', [LoginController::class, 'password'])->name('password.change');
+Route::post('/password/update', [LoginController::class, 'change_password'])->name('password.update');
 
 Route::middleware('auth')->group(function () {
     // Home
