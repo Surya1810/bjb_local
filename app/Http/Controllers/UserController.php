@@ -71,7 +71,7 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $user = User::find($id);
+        $user = User::findorfail($id);
         $request->validate([
             'name' => 'bail|required|max:255|unique:users,name,' . $user->id,
             'role_update' => 'bail|required',

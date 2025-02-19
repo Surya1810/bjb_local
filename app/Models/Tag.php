@@ -16,4 +16,8 @@ class Tag extends Model
     {
         return $this->hasOne(Document::class, 'rfid_number');
     }
+    public function agunan()
+    {
+        return $this->hasOne(Agunan::class, 'rfid_number');
+    }
 }

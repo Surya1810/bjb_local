@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Agunan;
+use App\Models\Document;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 
 class AgunanController extends Controller
@@ -12,7 +14,10 @@ class AgunanController extends Controller
      */
     public function index()
     {
-        //
+        $documents = Document::orderBy('created_at', 'desc')->get();
+        $tags = Tag::where('status', 'available')->get();
+
+        return view('agunan.index', compact('documents', 'tags'));
     }
 
     /**

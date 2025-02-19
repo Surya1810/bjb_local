@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Agunan extends Model
 {
-    protected $fillable = ['rfid_number', 'document_id'];
+    protected $fillable = ['rfid_number', 'document_id', 'name', 'number'];
 
     public function document()
     {

@@ -62,7 +62,7 @@
                                             Created at
                                         </th>
                                         <th style="width: 20%">
-                                            Asset
+                                            Document
                                         </th>
                                         <th style="width: 10%">
                                             Action
@@ -87,7 +87,10 @@
                                             <td>{{ $rfid->created_at->format('j F, Y') }}</td>
                                             <td>
                                                 @isset($rfid->document->no_dokumen)
-                                                    {{ $rfid->document->no_dokumen }}
+                                                    <strong>Dokumen: </strong>{{ $rfid->document->no_dokumen }}
+                                                @endisset
+                                                @isset($rfid->agunan->number)
+                                                    <strong>Agunan: </strong>{{ $rfid->agunan->number }}
                                                 @endisset
                                             </td>
                                             <td>
