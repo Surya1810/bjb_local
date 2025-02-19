@@ -36,6 +36,7 @@ Route::middleware('auth')->group(function () {
 
     // Agunan
     Route::resource('agunan', AgunanController::class);
+    Route::post('/agunan/import', [AgunanController::class, 'import'])->name('agunan.import');
 
     // Scan RFID
     Route::resource('scan', ScanController::class);

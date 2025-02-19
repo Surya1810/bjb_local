@@ -13,11 +13,6 @@ class Document extends Model
         'jatuh_tempo' => 'datetime'
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
     public function tag()
     {
         return $this->belongsTo(tag::class, 'rfid_number');
@@ -25,6 +20,6 @@ class Document extends Model
 
     public function agunans()
     {
-        return $this->hasMany(Agunan::class);
+        return $this->hasMany(Agunan::class, 'document_id', 'id');
     }
 }

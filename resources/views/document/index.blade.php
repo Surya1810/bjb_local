@@ -61,7 +61,7 @@
                                     <tr>
                                         <th rowspan="2" class="align-middle">RFID Number</th>
                                         <th colspan="8">Data Nasabah</th>
-                                        <th colspan="9">Info Dokumen</th>
+                                        <th colspan="10">Info Dokumen</th>
                                         <th colspan="4">Lokasi</th>
                                         <th rowspan="2" class="align-middle" style="width: 5%">Aksi</th>
                                     </tr>
@@ -81,6 +81,7 @@
                                         <th>Tanggal Jatuh Tempo</th>
                                         <th>Lama Pinjaman</th>
                                         <th>Nilai Pinjaman</th>
+                                        <th>Jumlah Agunan</th>
                                         <th>Keterangan</th>
                                         <th>Status</th>
                                         <th>Ruangan</th>
@@ -109,6 +110,7 @@
                                             <td>{{ $document->jatuh_tempo->format('j F, Y') }}</td>
                                             <td>{{ $document->lama }}</td>
                                             <td>{{ formatRupiah($document->pinjaman) }}</td>
+                                            <td>{{ $document->agunans->count() }}</td>
                                             <td>
                                                 @isset($document->desc)
                                                     {{ $document->desc }}
@@ -681,15 +683,15 @@
         }
 
         $(document).ready(function() {
-            let rowCount = $('#agunans-table tbody tr').length; // Hitung jumlah baris untuk membuat indeks unik
+            let itemIndex = 1;
 
             // Tambahkan baris baru
             $('#add-item').click(function() {
                 const newRow = `
                     <tr>
                         <td>
-                            <select class="form-control tag_agunan" style="width: 100%;" id="tag_agunan_${rowCount}"
-                                name="agunans[${rowCount}][rfid_number]" required>
+                            <select class="form-control tag_agunan" style="width: 100%;" id="tag_agunan_${itemIndex}"
+                                name="agunans[${itemIndex}][rfid_number]" required>
                                 <option></option>
                                 @foreach ($tags as $tag)
                                     <option value="{{ $tag->rfid_number }}"
@@ -699,9 +701,9 @@
                                 @endforeach
                             </select>
                         </td>
-                        <td><input type="text" name="agunans[${rowCount}][name]" class="form-control"
+                        <td><input type="text" name="agunans[${itemIndex}][name]" class="form-control"
                                 placeholder="Tulis nama agunan" required></td>
-                        <td><input type="text" name="agunans[${rowCount}][number]" class="form-control"
+                        <td><input type="text" name="agunans[${itemIndex}][number]" class="form-control"
                                 placeholder="Tulis nomor agunan" required></td>
                         <td><button type="button"
                                 class="btn btn-danger btn-sm remove-item rounded-partner"><i
@@ -710,10 +712,12 @@
                 `;
                 $('#agunans-table tbody').append(newRow);
 
-                $(`#tag_agunan_${rowCount}`).select2({
+                $(`#tag_agunan_${itemIndex}`).select2({
                     placeholder: "Pilih RFID Tag",
                     allowClear: true,
                 });
+
+                itemIndex++;
             });
 
             // Hapus baris
