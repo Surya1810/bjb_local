@@ -3,6 +3,7 @@
 use App\Http\Controllers\AgunanController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScanController;
 use App\Http\Controllers\TagController;
@@ -20,7 +21,7 @@ Route::post('/password/update', [LoginController::class, 'change_password'])->na
 
 Route::middleware('auth')->group(function () {
     // Home
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
     // User
     Route::resource('user', UserController::class);
 
