@@ -27,7 +27,6 @@
                         <div class="small-box bg-primary">
                             <div class="inner">
                                 <h3>{{ $users }}</h3>
-
                                 <strong>User</strong>
                             </div>
                             <div class="icon">
@@ -37,12 +36,12 @@
                         </div>
                     </a>
                 </div>
+
                 <div class="col-lg-3 col-6">
                     <a href="{{ route('document.index') }}">
                         <div class="small-box bg-primary">
                             <div class="inner">
                                 <h3>{{ $documents }}</h3>
-
                                 <strong>Document</strong>
                             </div>
                             <div class="icon">
@@ -52,12 +51,12 @@
                         </div>
                     </a>
                 </div>
+
                 <div class="col-lg-3 col-6">
                     <a href="{{ route('agunan.index') }}">
                         <div class="small-box bg-primary">
                             <div class="inner">
                                 <h3>{{ $agunans }}</h3>
-
                                 <strong>Agunan</strong>
                             </div>
                             <div class="icon">
@@ -73,7 +72,6 @@
                         <div class="small-box bg-primary">
                             <div class="inner">
                                 <h3>{{ $tags }}</h3>
-
                                 <strong>Tag RFID Remaining</strong>
                             </div>
                             <div class="icon">
@@ -83,8 +81,24 @@
                         </div>
                     </a>
                 </div>
+
+                
+                <div class="col-lg-3 col-6">
+                    <a href="{{ route('location.index') }}">
+                        <div class="small-box bg-success">
+                            <div class="inner">
+                                <h3>{{ $locations }}</h3>
+                                <strong>Locations</strong>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <span class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></span>
+                        </div>
+                    </a>
+                </div>
+
             </div>
-        </div>
         </div>
     </section>
 @endsection

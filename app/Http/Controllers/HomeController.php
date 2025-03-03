@@ -6,9 +6,9 @@ use App\Models\Agunan;
 use App\Models\Document;
 use App\Models\Tag;
 use App\Models\User;
-use Illuminate\Http\Request;
+use App\Models\Location; 
 
-use function React\Promise\all;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -31,9 +31,10 @@ class HomeController extends Controller
     {
         $users = User::all()->except(1)->count();
         $documents = Document::all()->count();
-        $agunans = Agunan::all()->count();;
+        $agunans = Agunan::all()->count();
         $tags = Tag::where('status', 'available')->count();
+        $locations = Location::count(); 
 
-        return view('home.dashboard', compact('users', 'documents', 'agunans', 'tags'));
+        return view('home.dashboard', compact('users', 'documents', 'agunans', 'tags', 'locations'));
     }
 }
