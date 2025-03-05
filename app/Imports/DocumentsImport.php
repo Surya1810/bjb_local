@@ -3,60 +3,57 @@
 namespace App\Imports;
 
 use App\Models\Document;
-use App\Models\Tag;
+use App\Models\Agunan;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class DocumentsImport implements ToModel, WithHeadingRow
 {
-    protected $existingRfids;
-
-    public function __construct()
-    {
-        $this->existingRfids = Tag::where('status', 'available')->pluck('rfid_number')->toArray();
-    }
-    /**
-     * @param array $row
-     *
-     * @return \Illuminate\Database\Eloquent\Model|null
-     */
     public function model(array $row)
     {
-        if (!in_array($row['rfid'], $this->existingRfids)) {
-            return null;
+        $rfid_document = $row['rfid_number']; // RFID Dokumen
+
+        // Simpan data ke tabel Document
+        $document = Document::create([
+            'rfid_number'       => $rfid_document,
+            'cif'               => $row['cif'],
+            'nik_nasabah'       => $row['nik_nasabah'],
+            'nama_nasabah'      => $row['nama_nasabah'],
+            'alamat_nasabah'    => $row['alamat_nasabah'],
+            'telp_nasabah'      => $row['telp_nasabah'],
+            'pekerjaan_nasabah' => $row['pekerjaan_nasabah'],
+            'rekening_nasabah'  => $row['rekening_nasabah'],
+            'instansi'          => $row['instansi'],
+            'no_dokumen'        => $row['no_dokumen'],
+            'segmen'            => $row['segmen'],
+            'cabang'            => $row['cabang'],
+            'akad'              => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['akad']),
+            'jatuh_tempo'       => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['jatuh_tempo']),
+            'lama'              => $row['lama'],
+            'pinjaman'          => $row['pinjaman'],
+            'room'              => $row['room'],
+            'row'               => $row['row'],
+            'rack'              => $row['rack'],
+            'box'               => $row['box'],
+            'status'            => $row['status'] ?? null,
+            'desc'              => $row['desc'] ?? null,
+            'is_there'          => $row['is_there'] ?? true,
+        ]);
+
+        // Simpan data agunan
+        $agunans = [];
+        for ($i = 0; $i < 10; $i++) { // Asumsikan maksimal ada 10 agunan
+            if (!empty($row["agunans_{$i}_rfid_number"])) {
+                $agunans[] = [
+                    'document_id' => $document->id,
+                    'rfid_number' => $row["agunans_{$i}_rfid_number"],
+                    'name'        => $row["agunans_{$i}_name"] ?? '',
+                    'number'      => $row["agunans_{$i}_number"] ?? '',
+                ];
+            }
         }
 
-        $document = Document::firstOrCreate(
-            ['rfid_number' => $row['rfid']], // Unik
-            [
-                'cif' => $row['cif'],
-                'nik_nasabah' => $row['nik'],
-                'nama_nasabah' => $row['nama'],
-                'alamat_nasabah' => $row['alamat'],
-                'telp_nasabah' => $row['telepon'],
-                'pekerjaan_nasabah' => $row['pekerjaan'],
-                'rekening_nasabah' => $row['rekening'],
-                'instansi' => $row['instansi'],
-
-                'no_dokumen' => $row['dokumen'],
-                'segmen' => $row['segmen'],
-                'cabang' => $row['cabang'],
-                'akad' => Date::excelToDateTimeObject($row['akad'])->format('Y-m-d'),
-                'jatuh_tempo' => Date::excelToDateTimeObject($row['jatuh_tempo'])->format('Y-m-d'),
-                'lama' => $row['lama_pinjaman'],
-                'pinjaman' => $row['nilai'],
-
-                'room' => $row['ruangan'],
-                'row' => $row['baris'],
-                'rack' => $row['rak'],
-                'box' => $row['box'],
-
-                'status' => $row['status'] ?? null,
-                'desc' => $row['keterangan'] ?? null,
-            ]
-        );
-        Tag::where('rfid_number', $row['rfid'])->update(['status' => 'used']);
+        Agunan::insert($agunans);
 
         return $document;
     }

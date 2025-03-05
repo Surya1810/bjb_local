@@ -10,6 +10,8 @@ use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use App\Exports\DocumentsExport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Session;
@@ -270,16 +272,116 @@ class DocumentController extends Controller
         return redirect()->route('document.index')->with(['pesan' => 'Document & Agunan deleted successfully', 'level-alert' => 'alert-success']);
     }
 
+
+
     public function import(Request $request)
     {
         $request->validate([
             'file' => 'required|mimes:xlsx,xls,csv',
         ]);
+
         try {
-            Excel::import(new DocumentsImport, $request->file('file'));
-            return back()->with(['pesan' => 'Assets imported successfully', 'level-alert' => 'alert-success']);
+            $file = $request->file('file');
+            $spreadsheet = IOFactory::load($file->getPathname());
+            $worksheet = $spreadsheet->getActiveSheet();
+            $rows = $worksheet->toArray();
+
+            foreach ($rows as $index => $row) {
+                if ($index == 0) continue; // Lewati header
+
+                // **Pastikan index sesuai dengan urutan kolom di Excel**
+                $tag_document = $row[0]; // RFID Dokumen
+                $cif = $row[1];
+                $nik = $row[2];
+                $nama = $row[3];
+                $alamat = $row[4];
+                $telepon = $row[5];
+                $pekerjaan = $row[6];
+                $rekening = $row[7];
+                $instansi = $row[8];
+
+                $no_dokumen = $row[9];
+                $segmen = $row[10];
+                $cabang = $row[11];
+                $akad = $row[12];
+                $jatuh_tempo = $row[13];
+                $lama = $row[14];
+                $pinjaman = $row[15];
+
+                $ruangan = $row[16];
+                $baris = $row[17];
+                $rak = $row[18];
+                $box = $row[19];
+
+                // **Ambil RFID Agunan dari kolom yang benar**
+                $tag_agunans = explode(',', $row[20]); // Cek apakah RFID agunan berada di index 20
+
+                if (in_array($tag_document, $tag_agunans)) {
+                    throw ValidationException::withMessages([
+                        'file' => 'Tag agunan tidak boleh sama dengan tag dokumen.'
+                    ]);
+                }
+
+                // **Update Status Tag**
+                $mergedTags = array_merge([$tag_document], $tag_agunans);
+                $tags = Tag::whereIn('rfid_number', $mergedTags)->get();
+                foreach ($tags as $tag) {
+                    $tag->status = 'used';
+                    $tag->save();
+                }
+
+                // **Simpan Data Dokumen**
+                $document = new Document();
+                $document->rfid_number = $tag_document;
+                $document->cif = $cif;
+                $document->nik_nasabah = $nik;
+                $document->nama_nasabah = $nama;
+                $document->alamat_nasabah = $alamat;
+                $document->telp_nasabah = $telepon;
+                $document->pekerjaan_nasabah = $pekerjaan;
+                $document->rekening_nasabah = $rekening;
+                $document->instansi = $instansi;
+
+                $document->no_dokumen = $no_dokumen;
+                $document->segmen = $segmen;
+                $document->cabang = $cabang;
+                $document->akad = $akad;
+                $document->jatuh_tempo = $jatuh_tempo;
+                $document->lama = $lama;
+                $document->pinjaman = $pinjaman;
+
+                $document->room = $ruangan;
+                $document->row = $baris;
+                $document->rack = $rak;
+                $document->box = $box;
+
+                $document->save();
+
+                // **Simpan Data Agunan**
+                $agunans = [];
+                foreach ($tag_agunans as $i => $tag_agunan) {
+                    if (!empty($tag_agunan)) {
+                        $agunans[] = [
+                            'document_id' => $document->id,
+                            'rfid_number' => trim($tag_agunan),
+                            'name'        => isset($row[21 + ($i * 2)]) ? trim($row[21 + ($i * 2)]) : '', // Nama agunan (pastikan indexnya benar)
+                            'number'      => isset($row[22 + ($i * 2)]) ? trim($row[22 + ($i * 2)]) : '', // Nomor agunan
+                        ];
+                    }
+                }
+
+                // Insert ke database
+                Agunan::insert($agunans);
+            }
+
+            return back()->with(['pesan' => 'Data berhasil diimport!', 'level-alert' => 'alert-success']);
         } catch (\Exception $e) {
-            return back()->with(['pesan' => $e->getMessage(), 'level-alert' => 'alert-danger']);
+            return back()->with(['pesan' => 'Gagal mengimport data: ' . $e->getMessage(), 'level-alert' => 'alert-danger']);
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new DocumentsExport, 'documents.xlsx');
     }
 }

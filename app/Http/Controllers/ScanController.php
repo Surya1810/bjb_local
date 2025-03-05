@@ -119,4 +119,31 @@ class ScanController extends Controller
             'message' => 'RFID sent successfully',
         ]);
     }
+
+    public function compareRFID(Request $request)
+    {
+        // Log untuk debugging
+        Log::info('Comparing scanned RFID:', $request->all());
+
+
+        $scannedTags = explode(',', $request->input('data'));
+
+        if (empty($scannedTags)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No RFID data received'
+            ], 400);
+        }
+
+
+        $matchedDocuments = Document::whereIn('rfid_number', $scannedTags)
+            ->select('id', 'rfid_number', 'room', 'row', 'rack', 'box')
+            ->get()
+            ->map(function ($document) {
+                $document->isThere = true;
+                return $document;
+            });
+
+        return response()->json($matchedDocuments);
+    }
 }

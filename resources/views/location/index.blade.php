@@ -30,19 +30,19 @@ Location List
 <section class="content">
     <div class="container-fluid">
         <div class="row">
+            <!-- Baris List -->
             <div class="col-12 col-md-6">
                 <div class="card card-outline rounded-partner card-primary">
-
-                    
-
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col-6">
                                 <h3 class="card-title">Baris List</h3>
                             </div>
-                            <div class="col-6">
-                                <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#addLocation" onclick="setCategory('baris')">Add
-                                    Baris</button>
+                            <div class="col-6 text-right">
+                                <button type="button" class="btn btn-sm btn-primary rounded-partner ml-2"
+                                    data-toggle="modal" data-target="#addLocation" onclick="setCategory('baris')">
+                                    <i class="fa-solid fa-plus"></i> Add Baris
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -61,14 +61,13 @@ Location List
                                 <tr>
                                     <td>{{ $location->number }}</td>
                                     <td>
-                                        <a href="{{ route('location.edit', $location->id) }}"
-                                            class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
                                         <form action="{{ route('location.destroy', $location->id) }}" method="POST"
                                             class="d-inline" onsubmit="return confirm('Are you sure?');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger"><i
-                                                    class="fas fa-trash"></i></button>
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
                                         </form>
                                     </td>
                                 </tr>
@@ -80,13 +79,23 @@ Location List
                 </div>
             </div>
 
-            <div class="col-6">
+            <!-- Rak List -->
+            <div class="col-12 col-md-6">
                 <div class="card card-outline rounded-partner card-primary">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h3 class="card-title">Rak List</h3>
-                        <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#addLocation"
-                            onclick="setCategory('rak')">Add Rak</button>
+                    <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col-6">
+                                <h3 class="card-title">Rak List</h3>
+                            </div>
+                            <div class="col-6 text-right">
+                                <button type="button" class="btn btn-sm btn-primary rounded-partner ml-2"
+                                    data-toggle="modal" data-target="#addLocation" onclick="setCategory('rak')">
+                                    <i class="fa-solid fa-plus"></i> Add Rak
+                                </button>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="card-body table-responsive">
                         <table id="rakTable" class="table table-bordered text-nowrap text-center">
                             <thead class="table-dark">
@@ -101,14 +110,13 @@ Location List
                                 <tr>
                                     <td>{{ $location->number }}</td>
                                     <td>
-                                        <a href="{{ route('location.edit', $location->id) }}"
-                                            class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
                                         <form action="{{ route('location.destroy', $location->id) }}" method="POST"
                                             class="d-inline" onsubmit="return confirm('Are you sure?');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger"><i
-                                                    class="fas fa-trash"></i></button>
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
                                         </form>
                                     </td>
                                 </tr>

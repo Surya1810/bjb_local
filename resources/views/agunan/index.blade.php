@@ -40,10 +40,10 @@
                                     <small><strong>Total Agunan: {{ $agunans->count() }}</strong></small>
                                 </div>
                                 <div class="col-6">
-                                    <button type="button" class="float-right btn btn-sm btn-primary rounded-partner ml-2"
-                                        data-toggle="modal" data-target="#addAgunan">
-                                        <i class="fa-solid fa-file-export"></i> Export
-                                    </button>
+                                        <button type="submit" class="float-right btn btn-sm btn-primary rounded-partner ml-2" data-toggle="modal"
+                                            data-target="#exportAgunan">
+                                            <i class="fa-solid fa-file-export"></i> Export
+                                        </button>
                                     <button type="button" class="float-right btn btn-sm btn-primary rounded-partner ml-2"
                                         data-toggle="modal" data-target="#importAgunan">
                                         <i class="fa-solid fa-file-import"></i> Import
@@ -305,6 +305,26 @@
         </div>
     </div>
 @endsection
+
+<!-- Modal Export Agunan -->
+<div class="modal fade" id="exportAgunan" tabindex="-1" aria-labelledby="exportAgunanLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exportAgunanLabel">Export Agunan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <p>Dokumen akan diekspor dalam format <strong>Excel (.xlsx)</strong>.</p>
+            </div>
+            <div class="modal-footer">
+                <a href="{{ route('agunan.export') }}" class="btn btn-primary rounded-partner">Download</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 @push('scripts')
     <!-- DataTables  & Plugins -->

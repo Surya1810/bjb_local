@@ -40,10 +40,10 @@ Document List
                                 <small><strong>Total Document: {{ $documents->count() }}</strong></small>
                             </div>
                             <div class="col-6">
-                                <button type="button" class="float-right btn btn-sm btn-primary rounded-partner ml-2"
-                                    data-toggle="modal" data-target="#addDocument">
-                                    <i class="fa-solid fa-file-export"></i> Export
-                                </button>
+                                    <button type="submit" class="float-right btn btn-sm btn-primary rounded-partner ml-2"
+                                        data-toggle="modal" data-target="#exportDocument">
+                                        <i class="fa-solid fa-file-export"></i> Export
+                                    </button>
                                 <button type="button" class="float-right btn btn-sm btn-primary rounded-partner ml-2"
                                     data-toggle="modal" data-target="#importDocument">
                                     <i class="fa-solid fa-file-import"></i> Import
@@ -555,9 +555,7 @@ Document List
                                 <select class="form-control tag" style="width: 100%;" id="editTag" name="tag" required>
                                     <option></option>
                                     @foreach ($tags as $tag)
-                                    <option value="{{ $tag->rfid_number }}" {{ $document->rfid_number ==
-                                        $tag->rfid_number ? 'selected' : (old('tag')==$tag->rfid_number ? 'selected' :
-                                        '') }}>
+                                    <option value="{{ $tag->rfid_number }}" @if(old('tag', $document->rfid_number) == $tag->rfid_number) selected @endif>
                                         {{ $tag->rfid_number }}
                                     </option>
                                     @endforeach
@@ -953,6 +951,26 @@ Document List
     </div>
 </div>
 @endsection
+
+<!-- Modal Export Document -->
+<div class="modal fade" id="exportDocument" tabindex="-1" aria-labelledby="exportDocumentLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exportDocumentLabel">Export Document</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <p>Dokumen akan diekspor dalam format <strong>Excel (.xlsx)</strong>.</p>
+            </div>
+            <div class="modal-footer">
+                <a href="{{ route('document.export') }}" class="btn btn-primary rounded-partner">Download</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 @push('scripts')
 <!-- DataTables  & Plugins -->

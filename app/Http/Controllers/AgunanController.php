@@ -6,6 +6,9 @@ use App\Models\Agunan;
 use App\Models\Document;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use App\Imports\AgunanImport;
+use App\Exports\AgunanExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AgunanController extends Controller
 {
@@ -22,28 +25,17 @@ class AgunanController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
         $request->validate([
             'dokumen' => 'required',
-
             'agunans' => 'required|array',
             'agunans.*.rfid_number' => 'required|exists:tags,rfid_number|distinct',
             'agunans.*.name' => 'required|string',
             'agunans.*.number' => 'required'
         ]);
-
-        $old = session()->getOldInput();
 
         $tag_agunans = collect($request->agunans)->pluck('rfid_number');
         $tags = Tag::whereIn('rfid_number', $tag_agunans)->get();
@@ -52,32 +44,17 @@ class AgunanController extends Controller
             $tag->status = 'used';
             $tag->save();
         }
+
         foreach ($request->agunans as $agunan) {
-            $dok_agunan = new Agunan();
-            $dok_agunan->document_id = $request->dokumen;
-            $dok_agunan->rfid_number = $agunan['rfid_number'];
-            $dok_agunan->name = $agunan['name'];
-            $dok_agunan->number = $agunan['number'];
-            $dok_agunan->save();
+            Agunan::create([
+                'document_id' => $request->dokumen,
+                'rfid_number' => $agunan['rfid_number'],
+                'name' => $agunan['name'],
+                'number' => $agunan['number'],
+            ]);
         }
 
         return redirect()->route('agunan.index')->with(['pesan' => 'Agunan created successfully', 'level-alert' => 'alert-success']);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Agunan $agunan)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Agunan $agunan)
-    {
-        //
     }
 
     /**
@@ -90,11 +67,10 @@ class AgunanController extends Controller
             'number' => 'required',
         ]);
 
-        $old = session()->getOldInput();
-
-        $agunan->name = $request->name;
-        $agunan->number = $request->number;
-        $agunan->update();
+        $agunan->update([
+            'name' => $request->name,
+            'number' => $request->number,
+        ]);
 
         return redirect()->route('agunan.index')->with(['pesan' => 'Agunan updated successfully', 'level-alert' => 'alert-success']);
     }
@@ -105,11 +81,43 @@ class AgunanController extends Controller
     public function destroy(Agunan $agunan)
     {
         $tag = Tag::where('rfid_number', $agunan->rfid_number)->first();
-        $tag->status = 'available';
-        $tag->save();
+        if ($tag) {
+            $tag->status = 'available';
+            $tag->save();
+        }
 
         $agunan->delete();
 
         return redirect()->route('agunan.index')->with(['pesan' => 'Agunan deleted successfully', 'level-alert' => 'alert-success']);
+    }
+
+    public function show($id)
+    {
+        $agunan = Agunan::findOrFail($id);
+        return view('agunan.show', compact('agunan'));
+    }
+
+
+    /**
+     * Import Agunan from Excel file.
+     */
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
+        ]);
+
+        try {
+            Excel::import(new AgunanImport, $request->file('file'));
+
+            return back()->with(['pesan' => 'Data Agunan berhasil diimport!', 'level-alert' => 'alert-success']);
+        } catch (\Exception $e) {
+            return back()->with(['pesan' => 'Gagal mengimport data: ' . $e->getMessage(), 'level-alert' => 'alert-danger']);
+        }
+    }
+
+    public function export()
+    {
+        return Excel::download(new AgunanExport, 'agunan.xlsx');
     }
 }
