@@ -550,22 +550,14 @@ Document List
                 <div class="modal-body">
                     <div class="row px-3">
                         <div class="col-12 col-md-4">
-                            <div class="form-group">
-                                <label for="editTag" class="mb-0 form-label col-form-label-sm">RFID Number</label>
-                                <select class="form-control tag" style="width: 100%;" id="editTag" name="tag" required>
-                                    <option></option>
-                                    @foreach ($tags as $tag)
-                                    <option value="{{ $tag->rfid_number }}" @if(old('tag', $document->rfid_number) == $tag->rfid_number) selected @endif>
-                                        {{ $tag->rfid_number }}
-                                    </option>
-                                    @endforeach
-                                </select>
-                                @error('tag')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
-                            </div>
+                            
+
+                                <div class="form-group">
+                                    <label class="mb-0 form-label col-form-label-sm">RFID Number</label>
+                                    <input class="form-control" value="{{ $document->rfid_number }}" disabled>
+                                </div>
+
+                            
                         </div>
 
                         <div class="col-12 col-md-4">
@@ -784,10 +776,8 @@ Document List
                         <div class="col-12 col-md-3">
                             <div class="form-group">
                                 <label for="editNilai" class="mb-0 form-label col-form-label-sm">Nilai Pinjaman</label>
-                                <input type="text" name="nilai" class="form-control price" id="editNilai"
-                                    placeholder="Input nilai"
-                                    value="{{ number_format($document->pinjaman, 0, ',', '.') ?? old('nilai') }}"
-                                    min="0" step="0.01" required>
+                                <input type="text" name="nilai" class="form-control price" id="editNilai" placeholder="Input nilai"
+                                    value="{{ old('nilai', $document->pinjaman ?? '') }}" required>
                                 @error('nilai')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -884,16 +874,8 @@ Document List
                             @foreach ($document->agunans as $key => $agunan)
                             <tr>
                                 <td>
-                                    <select class="form-control tag_agunan" style="width: 100%;"
-                                        id="editAgunanTag{{ $key }}" name="agunans[{{ $key }}][rfid_number]" required>
-                                        <option></option>
-                                        @foreach ($tags as $tag)
-                                        <option value="{{ $tag->rfid_number }}" {{ $agunan->rfid_number ==
-                                            $tag->rfid_number ? 'selected' : '' }}>
-                                            {{ $tag->rfid_number }}
-                                        </option>
-                                        @endforeach
-                                    </select>
+                                    <input type="text" name="agunans[{{ $key }}][number]" class="form-control" 
+                                    placeholder="Tulis nama agunan" value="{{ $agunan->rfid_number }}" disabled>
                                 </td>
                                 <td><input type="text" name="agunans[{{ $key }}][name]" class="form-control"
                                         placeholder="Tulis nama agunan" value="{{ $agunan->name }}" required></td>

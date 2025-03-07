@@ -108,13 +108,28 @@ class AgunanController extends Controller
         ]);
 
         try {
+            // Import data agunan dari file Excel
             Excel::import(new AgunanImport, $request->file('file'));
+
+            // Ambil semua rfid_number dari tabel agunans yang baru diimport
+            $rfidNumbers = Agunan::pluck('rfid_number')->toArray();
+
+            // Update status tag RFID menjadi "used"
+            $tags = Tag::whereIn('rfid_number', $rfidNumbers)->get();
+            foreach ($tags as $tag) {
+                $tag->status = 'used';
+                $tag->save();
+            }
+
+
+            Tag::whereIn('rfid_number', $rfidNumbers)->update(['status' => 'used']);
 
             return back()->with(['pesan' => 'Data Agunan berhasil diimport!', 'level-alert' => 'alert-success']);
         } catch (\Exception $e) {
             return back()->with(['pesan' => 'Gagal mengimport data: ' . $e->getMessage(), 'level-alert' => 'alert-danger']);
         }
     }
+
 
     public function export()
     {
