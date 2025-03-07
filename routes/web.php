@@ -4,6 +4,7 @@ use App\Http\Controllers\AgunanController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScanController;
 use App\Http\Controllers\TagController;
@@ -17,7 +18,7 @@ Route::get('/', function () {
 
 Auth::routes();
 Route::get('/password/change', [LoginController::class, 'password'])->name('password.change');
-Route::post('/password/update', [LoginController::class, 'change_password'])->name('password.update');
+Route::post('/password/updated', [LoginController::class, 'change_password'])->name('password.updated');
 
 Route::middleware('auth')->group(function () {
     // Home
@@ -44,4 +45,7 @@ Route::middleware('auth')->group(function () {
 
     // Tag RFID
     Route::resource('tag', TagController::class);
+
+    // Location
+    Route::resource('location', LocationController::class);
 });

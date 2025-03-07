@@ -12,7 +12,9 @@ class LocationController extends Controller
      */
     public function index()
     {
-        //
+        $locations = Location::all();
+
+        return view('location.index', compact('locations'));
     }
 
     /**
@@ -28,7 +30,25 @@ class LocationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'number_from' => 'required|integer',
+            'number_until' => 'required|integer|gte:number_from',
+            'for' => 'required|string'
+        ]);
+
+        $locations = [];
+        for ($i = (int) $request->number_from; $i <= (int) $request->number_until; $i++) {
+            $locations[] = [
+                'number' => $i,
+                'for' => $request->for,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        Location::insert($locations);
+
+        return redirect()->route('location.index')->with(['pesan' => 'Location added successfully', 'level-alert' => 'alert-success']);
     }
 
     /**
@@ -52,7 +72,16 @@ class LocationController extends Controller
      */
     public function update(Request $request, Location $location)
     {
-        //
+        $request->validate([
+            'baris' => 'required|string|max:255',
+            'rak' => 'required|string|max:255',
+
+        ]);
+
+        $location = Location::findOrFail($location);
+        $location->update($request->all());
+
+        return redirect()->route('location.index')->with('success', 'Location updated successfully!');
     }
 
     /**
@@ -60,6 +89,9 @@ class LocationController extends Controller
      */
     public function destroy(Location $location)
     {
-        //
+        $location = Location::findOrFail($location);
+        $location->delete();
+
+        return redirect()->route('location.index')->with('success', 'Location deleted successfully!');
     }
 }
