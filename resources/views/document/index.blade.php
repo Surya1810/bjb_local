@@ -426,14 +426,14 @@
                             </div>
                             <div class="col-12 col-md-3">
                                 <div class="form-group">
-                                    <label for="baris" class="mb-0 form-label col-form-label-sm">Baris</label>
-                                    <select class="form-control baris" style="width: 100%;" id="baris"
-                                        name="baris" required>
+                                    <label for="rak" class="mb-0 form-label col-form-label-sm">Rak</label>
+                                    <select class="form-control rak" style="width: 100%;" id="rak" name="rak"
+                                        required>
                                         <option></option>
-                                        @foreach ($rows as $row)
-                                            <option value="{{ $row->number }}"
-                                                {{ old('baris') == $row->number ? 'selected' : '' }}>
-                                                Baris {{ $row->number }}
+                                        @foreach ($racks as $rack)
+                                            <option value="{{ $rack->number }}"
+                                                {{ old('rak') == $rack->number ? 'selected' : '' }}>
+                                                Rak {{ $rack->number }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -446,14 +446,14 @@
                             </div>
                             <div class="col-12 col-md-3">
                                 <div class="form-group">
-                                    <label for="rak" class="mb-0 form-label col-form-label-sm">Rak</label>
-                                    <select class="form-control rak" style="width: 100%;" id="rak" name="rak"
-                                        required>
+                                    <label for="baris" class="mb-0 form-label col-form-label-sm">Baris</label>
+                                    <select class="form-control baris" style="width: 100%;" id="baris"
+                                        name="baris" required>
                                         <option></option>
-                                        @foreach ($racks as $rack)
-                                            <option value="{{ $rack->number }}"
-                                                {{ old('rak') == $rack->number ? 'selected' : '' }}>
-                                                Rak {{ $rack->number }}
+                                        @foreach ($rows as $row)
+                                            <option value="{{ $row->number }}"
+                                                {{ old('baris') == $row->number ? 'selected' : '' }}>
+                                                Baris {{ $row->number }}
                                             </option>
                                         @endforeach
                                     </select>
