@@ -40,10 +40,10 @@
                                     <small><strong>Total Agunan: {{ $agunans->count() }}</strong></small>
                                 </div>
                                 <div class="col-6">
-                                    <button type="button" class="float-right btn btn-sm btn-primary rounded-partner ml-2"
-                                        data-toggle="modal" data-target="#addAgunan">
+                                    <a href="{{ route('agunan.export') }}"
+                                        class="float-right btn btn-sm btn-primary rounded-partner ml-2">
                                         <i class="fa-solid fa-file-export"></i> Export
-                                    </button>
+                                    </a>
                                     <button type="button" class="float-right btn btn-sm btn-primary rounded-partner ml-2"
                                         data-toggle="modal" data-target="#importAgunan">
                                         <i class="fa-solid fa-file-import"></i> Import

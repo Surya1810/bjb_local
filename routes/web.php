@@ -35,10 +35,13 @@ Route::middleware('auth')->group(function () {
     // Document
     Route::resource('document', DocumentController::class);
     Route::post('/document/import', [DocumentController::class, 'import'])->name('document.import');
+    Route::get('/export/documents', [DocumentController::class, 'export'])->name('document.export');
 
     // Agunan
     Route::resource('agunan', AgunanController::class);
     Route::post('/agunan/import', [AgunanController::class, 'import'])->name('agunan.import');
+    Route::get('/export/agunan', [AgunanController::class, 'export'])->name('agunan.export');
+
 
     // Scan RFID
     Route::resource('scan', ScanController::class);

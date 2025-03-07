@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Agunan;
 use App\Models\Document;
 use App\Models\Tag;
+use App\Exports\AgunansExport;
+use App\Imports\AgunansImport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 
 class AgunanController extends Controller
@@ -53,12 +56,12 @@ class AgunanController extends Controller
             $tag->save();
         }
         foreach ($request->agunans as $agunan) {
-            $dok_agunan = new Agunan();
-            $dok_agunan->document_id = $request->dokumen;
-            $dok_agunan->rfid_number = $agunan['rfid_number'];
-            $dok_agunan->name = $agunan['name'];
-            $dok_agunan->number = $agunan['number'];
-            $dok_agunan->save();
+            Agunan::create([
+                'document_id' => $request->dokumen,
+                'rfid_number' => $agunan['rfid_number'],
+                'name' => $agunan['name'],
+                'number' => $agunan['number'],
+            ]);
         }
 
         return redirect()->route('agunan.index')->with(['pesan' => 'Agunan created successfully', 'level-alert' => 'alert-success']);
@@ -92,9 +95,10 @@ class AgunanController extends Controller
 
         $old = session()->getOldInput();
 
-        $agunan->name = $request->name;
-        $agunan->number = $request->number;
-        $agunan->update();
+        $agunan->update([
+            'name' => $request->name,
+            'number' => $request->number,
+        ]);
 
         return redirect()->route('agunan.index')->with(['pesan' => 'Agunan updated successfully', 'level-alert' => 'alert-success']);
     }
@@ -111,5 +115,42 @@ class AgunanController extends Controller
         $agunan->delete();
 
         return redirect()->route('agunan.index')->with(['pesan' => 'Agunan deleted successfully', 'level-alert' => 'alert-success']);
+    }
+
+    /**
+     * Import Agunan from Excel file.
+     */
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
+        ]);
+
+        try {
+            // Import data agunan dari file Excel
+            Excel::import(new Agunansimport, $request->file('file'));
+
+            // Ambil semua rfid_number dari tabel agunans yang baru diimport
+            $rfidNumbers = Agunan::pluck('rfid_number')->toArray();
+
+            // Update status tag RFID menjadi "used"
+            $tags = Tag::whereIn('rfid_number', $rfidNumbers)->get();
+            foreach ($tags as $tag) {
+                $tag->status = 'used';
+                $tag->save();
+            }
+
+
+            Tag::whereIn('rfid_number', $rfidNumbers)->update(['status' => 'used']);
+
+            return back()->with(['pesan' => 'Data Agunan berhasil diimport!', 'level-alert' => 'alert-success']);
+        } catch (\Exception $e) {
+            return back()->with(['pesan' => 'Gagal mengimport data: ' . $e->getMessage(), 'level-alert' => 'alert-danger']);
+        }
+    }
+
+    public function export()
+    {
+        return Excel::download(new AgunansExport, 'agunan.xlsx');
     }
 }

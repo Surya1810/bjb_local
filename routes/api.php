@@ -16,3 +16,11 @@ Route::get('/documents', function () {
         Document::with(['tag:rfid_number,rfid_number', 'agunans'])->get()
     );
 });
+
+Route::get('/last-scan', function () {
+    return response()->json([
+        'lastTimeScan' => now()->format('d/m/Y H:i:s')
+    ]);
+});
+
+Route::post('/compare-rfid', [ScanController::class, 'compareRFID']);
