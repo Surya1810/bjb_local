@@ -30,10 +30,7 @@ class ReportController extends Controller
         $totalUser = User::all()->except(1)->count();
 
         // Ambil log scan dengan total scan dan waktu terakhir scan
-        $logScans = Scan::select('updated_at', DB::raw('COUNT(*) as total'))
-            ->groupBy('updated_at')
-            ->orderBy('updated_at', 'desc')
-            ->get();
+        $logScans = Scan::orderBy('created_at', 'desc')->paginate(10);
 
         // Menghitung total dokumen yang ditemukan 
         $totalKetemu = Document::where('is_there', 1)->count();

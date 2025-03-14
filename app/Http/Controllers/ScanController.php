@@ -88,12 +88,10 @@ class ScanController extends Controller
     }
 
     /**
-     * Proses scan RFID untuk Dokumen & Agunan.
+     * Proses scan RFID untuk Dokumen.
      */
     public function scan_document(Request $request)
     {
-        Log::info('Scan RFID for document received:', $request->all());
-
         // Pastikan data RFID diterima
         if (!$request->has('data')) {
             return response()->json([
@@ -112,39 +110,27 @@ class ScanController extends Controller
             ], 400);
         }
 
-        // Tentukan kategori (dokumen atau agunan)
-        $category = $request->input('category');
-
-        if ($category === 'dokumen') {
-            $this->updateRFIDStatus(Document::class, $tags);
-        } elseif ($category === 'agunan') {
-            $this->updateRFIDStatus(Agunan::class, $tags);
-        } else {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Invalid category'
-            ], 400);
-        }
+        // Update status document berdasarkan RFID
+        $this->updateRFIDStatus(Document::class, $tags);
 
         // Simpan log scan
-        Scan::create([
-            'category' => $category,
-            'total' => count($tags)
-        ]);
+        $scan = new Scan();
+        $scan->total = count($tags);
+        $scan->category = 'dokumen';
+        $scan->save();
+
 
         // Kirim event jika diperlukan
         TagScanned::dispatch($tags);
 
         return response()->json([
             'message' => 'RFID scanned successfully',
-            'category' => $category
+            'category' => 'dokumen'
         ]);
     }
 
     public function scan_agunan(Request $request)
     {
-        Log::info('Scan RFID for agunan received:', $request->all());
-
         if (!$request->has('data')) {
             return response()->json([
                 'status' => 'error',
@@ -165,10 +151,10 @@ class ScanController extends Controller
         $this->updateRFIDStatus(Agunan::class, $tags);
 
         // Simpan log scan
-        Scan::create([
-            'category' => 'agunan',
-            'total' => count($tags)
-        ]);
+        $scan = new Scan();
+        $scan->total = count($tags);
+        $scan->category = 'agunan';
+        $scan->save();
 
         // Kirim event jika diperlukan
         TagScanned::dispatch($tags);
@@ -179,11 +165,29 @@ class ScanController extends Controller
         ]);
     }
 
+    /**
+     * Memperbarui status `is_there` dalam model.
+     */
+    private function updateRFIDStatus($model, $tags)
+    {
+        // Ambil semua data terkait
+        $allItems = $model::all();
+
+        foreach ($allItems as $item) {
+            if (in_array($item->rfid_number, $tags)) {
+                $item->is_there = true;
+            } else {
+                $item->is_there = false;
+            }
+            $item->save();
+        }
+    }
+
     public function dashboard()
     {
         // Ambil data terakhir kali scan
         $lastScan = Scan::latest()->first();
-        $lastTimeScan = $lastScan ? $lastScan->created_at->toDateTimeString() : null;
+        $lastTimeScan = $lastScan ? $lastScan->created_at->toDateTimeString() : 'kosong';
 
         // Hitung total data (Dokumen + Agunan)
         $totalDocuments = Document::count();
@@ -203,8 +207,6 @@ class ScanController extends Controller
         // List dokumen yang hilang (misal ambil berdasarkan no_dokumen)
         $listDocumentLost = Document::where('is_there', true)->pluck('no_dokumen')->toArray();
 
-        dd($listDocumentLost);
-
         return response()->json([
             'status' => 'success',
             'data' => [
@@ -215,7 +217,7 @@ class ScanController extends Controller
                 ],
                 'totalDocuments' => $totalDocuments,
                 'totalAgunan' => $totalAgunan,
-                'Dashboard' => [
+                'dashboard' => [
                     'totalDocumentsFound' => $totalDocumentsFound,
                     'totalDocumentsLost' => $totalDocumentsLost,
                     'valueLostDocument' => $valueLostDocument,

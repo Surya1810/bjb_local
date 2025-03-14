@@ -9,22 +9,6 @@
     <link rel="stylesheet" href="{{ asset('assets/adminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet"
         href="{{ asset('assets/adminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-    <style>
-        .small-box {
-            border-radius: 12px;
-            transition: transform 0.2s ease-in-out;
-        }
-
-        .small-box:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .table-responsive {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-    </style>
 @endpush
 
 @section('content')
@@ -133,6 +117,7 @@
                                     <thead>
                                         <tr>
                                             <th>Last Scan</th>
+                                            <th>Category</th>
                                             <th>Total Scanned</th>
                                         </tr>
                                     </thead>
@@ -140,6 +125,7 @@
                                         @foreach ($logScans as $log)
                                             <tr>
                                                 <td>{{ $log->updated_at }}</td>
+                                                <td>{{ $log->category }}</td>
                                                 <td>{{ $log->total }}</td>
                                             </tr>
                                         @endforeach
@@ -163,10 +149,10 @@
 
     <script>
         $('#logTable').DataTable({
-            "paging": true,
+            "paging": false,
             'processing': true,
-            "searching": true,
-            "info": true,
+            "searching": false,
+            "info": false,
             "scrollX": false,
             "order": [],
         });
