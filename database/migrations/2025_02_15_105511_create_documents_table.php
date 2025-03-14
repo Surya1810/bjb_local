@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('rfid_number')->unique()->references('rfid_number')->on('tags');
             $table->string('cif');
-            $table->bigInteger('nik_nasabah');
+            $table->string('nik_nasabah');
             $table->string('nama_nasabah');
             $table->text('alamat_nasabah');
-            $table->bigInteger('telp_nasabah');
+            $table->string('telp_nasabah');
             $table->string('pekerjaan_nasabah');
-            $table->bigInteger('rekening_nasabah');
+            $table->string('rekening_nasabah');
             $table->string('instansi');
 
             $table->string('no_dokumen');

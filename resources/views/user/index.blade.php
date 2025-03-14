@@ -38,10 +38,13 @@
                                     <h3 class="card-title">User List</h3>
                                 </div>
                                 <div class="col-6">
-                                    <button type="button" class="float-right btn btn-sm btn-primary rounded-partner ml-2"
-                                        data-toggle="modal" data-target="#addUser">
-                                        <i class="fa-solid fa-plus"></i> Add
-                                    </button>
+                                    @if (auth()->user()->role_id == 1 || auth()->user()->role_id == 2)
+                                        <button type="button"
+                                            class="float-right btn btn-sm btn-primary rounded-partner ml-2"
+                                            data-toggle="modal" data-target="#addUser">
+                                            <i class="fa-solid fa-plus"></i> Add
+                                        </button>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -274,17 +277,10 @@
             $('#userTable').DataTable({
                 "paging": true,
                 'processing': true,
-                "lengthChange": true,
                 "searching": true,
                 "info": true,
-                "autoWidth": false,
-                "responsive": true,
+                "scrollX": true,
                 "order": [],
-                "columnDefs": [{
-                    "orderable": true,
-                }]
-                // "scrollX": true,
-                // width: "700px",
             });
 
             $('.role').select2({

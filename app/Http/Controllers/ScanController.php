@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\TagScanned;
 use App\Models\Document;
+use App\Models\Agunan;
 use App\Models\Scan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -15,9 +16,27 @@ class ScanController extends Controller
      */
     public function index()
     {
-        $last_checked = Scan::latest()->first();
+        //
+    }
 
-        return view('scan.index', compact('last_checked'));
+    /**
+     * Menampilkan halaman scan dokumen.
+     */
+    public function document()
+    {
+        $last_checked = Scan::where('category', 'dokumen')->latest()->first();
+        return view('scan.document', compact('last_checked'));
+    }
+
+    /**
+     * Menampilkan halaman scan agunan.
+     */
+    public function agunan()
+    {
+        $last_checked = Scan::where('category', 'agunan')->latest()->first();
+        $agunans = Agunan::all(); // Ambil semua data agunan
+
+        return view('scan.agunan', compact('last_checked', 'agunans'));
     }
 
     /**
@@ -39,7 +58,7 @@ class ScanController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Scan $scan)
+    public function show(Scan $role)
     {
         //
     }
@@ -47,7 +66,7 @@ class ScanController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Scan $scan)
+    public function edit(Scan $role)
     {
         //
     }
@@ -55,7 +74,7 @@ class ScanController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Scan $scan)
+    public function update(Request $request, Scan $role)
     {
         //
     }
@@ -63,87 +82,146 @@ class ScanController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Scan $scan)
+    public function destroy(Scan $role)
     {
         //
     }
 
     /**
-     * Get API
+     * Proses scan RFID untuk Dokumen & Agunan.
      */
-    public function scan(Request $request)
+    public function scan_document(Request $request)
     {
-        // Ambil data dan ubah menjadi array
-        $tags = explode(',', $request->input('data'));
+        Log::info('Scan RFID for document received:', $request->all());
 
-        // Pastikan data ada dan merupakan array
-        if (empty($tags) || !is_array($tags)) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Invalid data format'
-            ], 400);
-        }
-
-        // Validasi: Setiap elemen dalam array harus string
-        $validated = ['data' => $tags]; // Menyesuaikan struktur request
-        $request->merge($validated); // Update request sebelum validasi
-
-        $request->validate([
-            'data' => 'required|array',
-            'data.*' => 'string'
-        ]);
-
-        $scannedTags = $tags;
-
-        $allDocuments = Document::all();
-
-        foreach ($allDocuments as $document) {
-            if (in_array($document->rfid_number, $scannedTags)) {
-                $document->is_there = true;
-            } else {
-                $document->is_there = false;
-            }
-            $document->save();
-        }
-
-        // Simpan log ke rfid_logs
-        foreach ($request->data as $data) {
-            $rfid = new Scan();
-            $rfid->rfid_number = $data;
-            $rfid->save();
-        }
-
-        TagScanned::dispatch($scannedTags);
-
-        return response()->json([
-            'message' => 'RFID sent successfully',
-        ]);
-    }
-
-    public function compareRFID(Request $request)
-    {
-        // Log untuk debugging
-        Log::info('Comparing scanned RFID:', $request->all());
-
-
-        $scannedTags = explode(',', $request->input('data'));
-
-        if (empty($scannedTags)) {
+        // Pastikan data RFID diterima
+        if (!$request->has('data')) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'No RFID data received'
             ], 400);
         }
 
+        // Ubah data RFID menjadi array
+        $tags = explode(',', $request->input('data'));
 
-        $matchedDocuments = Document::whereIn('rfid_number', $scannedTags)
-            ->select('id', 'rfid_number', 'room', 'row', 'rack', 'box')
-            ->get()
-            ->map(function ($document) {
-                $document->isThere = true;
-                return $document;
-            });
+        if (empty($tags)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid data format'
+            ], 400);
+        }
 
-        return response()->json($matchedDocuments);
+        // Tentukan kategori (dokumen atau agunan)
+        $category = $request->input('category');
+
+        if ($category === 'dokumen') {
+            $this->updateRFIDStatus(Document::class, $tags);
+        } elseif ($category === 'agunan') {
+            $this->updateRFIDStatus(Agunan::class, $tags);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid category'
+            ], 400);
+        }
+
+        // Simpan log scan
+        Scan::create([
+            'category' => $category,
+            'total' => count($tags)
+        ]);
+
+        // Kirim event jika diperlukan
+        TagScanned::dispatch($tags);
+
+        return response()->json([
+            'message' => 'RFID scanned successfully',
+            'category' => $category
+        ]);
+    }
+
+    public function scan_agunan(Request $request)
+    {
+        Log::info('Scan RFID for agunan received:', $request->all());
+
+        if (!$request->has('data')) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No RFID data received'
+            ], 400);
+        }
+
+        $tags = explode(',', $request->input('data'));
+
+        if (empty($tags)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid data format'
+            ], 400);
+        }
+
+        // Update status agunan berdasarkan RFID
+        $this->updateRFIDStatus(Agunan::class, $tags);
+
+        // Simpan log scan
+        Scan::create([
+            'category' => 'agunan',
+            'total' => count($tags)
+        ]);
+
+        // Kirim event jika diperlukan
+        TagScanned::dispatch($tags);
+
+        return response()->json([
+            'message' => 'RFID agunan scanned successfully',
+            'category' => 'agunan'
+        ]);
+    }
+
+    public function dashboard()
+    {
+        // Ambil data terakhir kali scan
+        $lastScan = Scan::latest()->first();
+        $lastTimeScan = $lastScan ? $lastScan->created_at->toDateTimeString() : null;
+
+        // Hitung total data (Dokumen + Agunan)
+        $totalDocuments = Document::count();
+        $totalAgunan = Agunan::count();
+        $totalData = $totalDocuments + $totalAgunan;
+
+        // Hitung total value (sesuaikan dengan field yang menyimpan value)
+        $totalvalue = Document::sum('pinjaman');
+
+        // Dokumen yang ditemukan dan hilang
+        $totalDocumentsFound = Document::where('is_there', true)->count();
+        $totalDocumentsLost = Document::where('is_there', false)->count();
+
+        // value dari dokumen yang hilang
+        $valueLostDocument = Document::where('is_there', false)->sum('pinjaman');
+
+        // List dokumen yang hilang (misal ambil berdasarkan no_dokumen)
+        $listDocumentLost = Document::where('is_there', true)->pluck('no_dokumen')->toArray();
+
+        dd($listDocumentLost);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'overview' => [
+                    'lastTimeScan' => $lastTimeScan,
+                    'totalData' => $totalData,
+                    'totalvalue' => $totalvalue,
+                ],
+                'totalDocuments' => $totalDocuments,
+                'totalAgunan' => $totalAgunan,
+                'Dashboard' => [
+                    'totalDocumentsFound' => $totalDocumentsFound,
+                    'totalDocumentsLost' => $totalDocumentsLost,
+                    'valueLostDocument' => $valueLostDocument,
+                    'listDocumentLost' => $listDocumentLost,
+                ],
+            ],
+        ]);
     }
 }

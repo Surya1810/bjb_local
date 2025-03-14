@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Agunan;
 use App\Models\Document;
 use App\Models\Tag;
-use App\Exports\AgunansExport;
-use App\Imports\AgunansImport;
-use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
+use App\Imports\AgunansImport;
+use App\Exports\AgunansExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AgunanController extends Controller
 {
@@ -25,28 +25,17 @@ class AgunanController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
         $request->validate([
             'dokumen' => 'required',
-
             'agunans' => 'required|array',
             'agunans.*.rfid_number' => 'required|exists:tags,rfid_number|distinct',
             'agunans.*.name' => 'required|string',
             'agunans.*.number' => 'required'
         ]);
-
-        $old = session()->getOldInput();
 
         $tag_agunans = collect($request->agunans)->pluck('rfid_number');
         $tags = Tag::whereIn('rfid_number', $tag_agunans)->get();
@@ -55,6 +44,7 @@ class AgunanController extends Controller
             $tag->status = 'used';
             $tag->save();
         }
+
         foreach ($request->agunans as $agunan) {
             Agunan::create([
                 'document_id' => $request->dokumen,
@@ -68,22 +58,6 @@ class AgunanController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Agunan $agunan)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Agunan $agunan)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Agunan $agunan)
@@ -92,8 +66,6 @@ class AgunanController extends Controller
             'name' => 'required|string',
             'number' => 'required',
         ]);
-
-        $old = session()->getOldInput();
 
         $agunan->update([
             'name' => $request->name,
@@ -109,13 +81,22 @@ class AgunanController extends Controller
     public function destroy(Agunan $agunan)
     {
         $tag = Tag::where('rfid_number', $agunan->rfid_number)->first();
-        $tag->status = 'available';
-        $tag->save();
+        if ($tag) {
+            $tag->status = 'available';
+            $tag->save();
+        }
 
         $agunan->delete();
 
         return redirect()->route('agunan.index')->with(['pesan' => 'Agunan deleted successfully', 'level-alert' => 'alert-success']);
     }
+
+    public function show($id)
+    {
+        $agunan = Agunan::findOrFail($id);
+        return view('agunan.show', compact('agunan'));
+    }
+
 
     /**
      * Import Agunan from Excel file.
@@ -128,7 +109,7 @@ class AgunanController extends Controller
 
         try {
             // Import data agunan dari file Excel
-            Excel::import(new Agunansimport, $request->file('file'));
+            Excel::import(new AgunansImport, $request->file('file'));
 
             // Ambil semua rfid_number dari tabel agunans yang baru diimport
             $rfidNumbers = Agunan::pluck('rfid_number')->toArray();
@@ -149,8 +130,13 @@ class AgunanController extends Controller
         }
     }
 
+
     public function export()
     {
-        return Excel::download(new AgunansExport, 'agunan.xlsx');
+
+        $date = date('Y-m-d');
+        $fileName = "agunan-$date.xlsx";
+
+        return Excel::download(new AgunansExport, $fileName);
     }
 }

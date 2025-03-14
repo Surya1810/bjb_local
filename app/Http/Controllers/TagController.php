@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\TagsExport;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TagController extends Controller
 {
@@ -91,5 +93,13 @@ class TagController extends Controller
         } else {
             return redirect()->back()->with(['pesan' => 'Tag used on document', 'level-alert' => 'alert-danger']);
         }
+    }
+
+    public function export()
+    {
+        $date = date('Y-m-d');
+        $fileName = "exportTag-$date.xlsx";
+
+        return Excel::download(new TagsExport, $fileName);
     }
 }

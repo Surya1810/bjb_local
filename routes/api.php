@@ -9,7 +9,9 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::post('/data', [ScanController::class, 'scan']);
+Route::post('/scan-document', [ScanController::class, 'scan_document']);
+Route::post('/scan-agunan', [ScanController::class, 'scan_agunan']);
+Route::get('/dashboard', [ScanController::class, 'dashboard']);
 
 Route::get('/documents', function () {
     return response()->json(
@@ -22,5 +24,3 @@ Route::get('/last-scan', function () {
         'lastTimeScan' => now()->format('d/m/Y H:i:s')
     ]);
 });
-
-Route::post('/compare-rfid', [ScanController::class, 'compareRFID']);

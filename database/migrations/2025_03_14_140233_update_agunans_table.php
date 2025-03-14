@@ -11,13 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('scans', function (Blueprint $table) {
-            $table->id();
-            // $table->string('rfid_number')->unique();
-            $table->enum('category', ['agunan', 'dokumen']);
-            $table->integer('total')->default(1);
-            $table->timestamps();
-        });
+        //
     }
 
     /**
@@ -25,6 +19,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('scans');
+        //
     }
 };

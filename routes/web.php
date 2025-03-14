@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\AgunanController;
+use App\Http\Controllers\ChangeHistoryController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScanController;
 use App\Http\Controllers\TagController;
@@ -13,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect()->route('home');
+    return redirect()->route('report.index');
 });
 
 Auth::routes();
@@ -22,7 +24,9 @@ Route::post('/password/updated', [LoginController::class, 'change_password'])->n
 
 Route::middleware('auth')->group(function () {
     // Home
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/home', function () {
+        return redirect()->route('report.index');
+    })->name('home');
     // User
     Route::resource('user', UserController::class);
 
@@ -36,6 +40,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('document', DocumentController::class);
     Route::post('/document/import', [DocumentController::class, 'import'])->name('document.import');
     Route::get('/export/documents', [DocumentController::class, 'export'])->name('document.export');
+    Route::get('/document/{id}/borrow', [DocumentController::class, 'borrowForm'])->name('document.borrow');
+    Route::post('/document/{id}/borrow', [DocumentController::class, 'borrowStore'])->name('document.borrow.store');
 
     // Agunan
     Route::resource('agunan', AgunanController::class);
@@ -45,10 +51,19 @@ Route::middleware('auth')->group(function () {
 
     // Scan RFID
     Route::resource('scan', ScanController::class);
+    Route::get('/scan-document', [ScanController::class, 'document'])->name('scan.index_document');
+    Route::get('/scan-agunan', [ScanController::class, 'agunan'])->name('scan.index_agunan');
 
     // Tag RFID
     Route::resource('tag', TagController::class);
+    Route::get('/export/tag', [TagController::class, 'export'])->name('tag.export');
 
     // Location
     Route::resource('location', LocationController::class);
+
+    // Report
+    Route::get('report', [ReportController::class, 'index'])->name('report.index');
+
+    // History
+    Route::get('history', [ChangeHistoryController::class, 'index'])->name('history.index');
 });

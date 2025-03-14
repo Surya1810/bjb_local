@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
         $user = User::create([
             'role_id' => '1',
             'name' => 'Partnership',
-            'password' => bcrypt('Jayaselalu28'),
+            'password' => bcrypt('Jayaselalu28@'),
         ]);
         $user = User::create([
             'role_id' => '2',

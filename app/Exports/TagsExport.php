@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\Document;
+use App\Models\Tag;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
@@ -10,79 +10,31 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 
-class DocumentsExport implements FromCollection, WithHeadings, WithStyles, WithEvents
+class TagsExport implements FromCollection, WithHeadings, WithStyles, WithEvents
 {
 
 
     public function collection()
     {
-        return Document::select(
-            'rfid_number',
-            'cif',
-            'nik_nasabah',
-            'nama_nasabah',
-            'alamat_nasabah',
-            'telp_nasabah',
-            'pekerjaan_nasabah',
-            'rekening_nasabah',
-            'instansi',
-            'no_dokumen',
-            'segmen',
-            'cabang',
-            'akad',
-            'jatuh_tempo',
-            'lama',
-            'pinjaman',
-            'room',
-            'row',
-            'rack',
-            'box',
-            'status',
-            'desc',
-            'is_there'
-        )->get()->map(function ($row) {
-            $row->akad = $row->akad ? $row->akad->format('Y-m-d') : null;
-            $row->jatuh_tempo = $row->jatuh_tempo ? $row->jatuh_tempo->format('Y-m-d') : null;
-
-            // Format pinjaman ke Rupiah
-            $row->pinjaman = 'Rp' . number_format($row->pinjaman, 0, ',', '.');
-
-            return $row;
-        });
+        return Tag::select('rfid_number', 'status', 'created_at')
+            ->get()
+            ->map(function ($row) {
+                return [
+                    'rfid_number' => $row->rfid_number,
+                    'status' => $row->status,
+                    'created_at' => $row->created_at->format('Y-m-d'),
+                ];
+            });
     }
-
-
-
-
 
     public function headings(): array
     {
         return [
-            ["Laporan Data Dokumen"], // Judul dokumen di baris pertama
-            [ // Header tabel di baris kedua
+            ["Laporan Data Tag RFID"],
+            [
                 'RFID Number',
-                'CIF',
-                'NIK Nasabah',
-                'Nama Nasabah',
-                'Alamat Nasabah',
-                'Telp Nasabah',
-                'Pekerjaan Nasabah',
-                'Rekening Nasabah',
-                'Instansi',
-                'No Dokumen',
-                'Segmen',
-                'Cabang',
-                'Akad',
-                'Jatuh Tempo',
-                'Lama',
-                'Pinjaman',
-                'Room',
-                'Row',
-                'Rack',
-                'Box',
                 'Status',
-                'Deskripsi',
-                'Jumlah Agunan'
+                'Created At',
             ]
         ];
     }

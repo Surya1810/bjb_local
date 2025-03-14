@@ -16,7 +16,7 @@
                             </div>
                             <div class="col-12 col-md-6 px-5 py-5 bg-primary rounded-partner m-0">
                                 <h3 class="text-center"><strong>Login</strong></h3>
-                                <form method="POST" action="{{ route('login') }}">
+                                <form method="POST" action="{{ route('login') }}" autocomplete="off">
                                     @csrf
                                     <div class="my-3">
                                         <label for="name"

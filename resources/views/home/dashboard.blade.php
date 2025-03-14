@@ -22,13 +22,11 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-3 col-6">
-                    <a href="{{ route('user.index') }}">
+                <div class="col-lg-2 col-6">
+                    <a href="{{ route('document.index') }}">
                         <div class="small-box bg-primary">
                             <div class="inner">
-                                <h3>{{ $users }}</h3>
-
-                                <strong>User</strong>
+                                <h4 class="mb-4">Document List</h4>
                             </div>
                             <div class="icon">
                                 <i class="fas fa-solid fa-user"></i>
@@ -37,13 +35,76 @@
                         </div>
                     </a>
                 </div>
-                <div class="col-lg-3 col-6">
+                <div class="col-lg-2 col-6">
                     <a href="{{ route('document.index') }}">
                         <div class="small-box bg-primary">
                             <div class="inner">
-                                <h3>{{ $documents }}</h3>
-
-                                <strong>Document</strong>
+                                <h4 class="mb-4">Agunan List</h4>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-solid fa-user"></i>
+                            </div>
+                            <span class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-2 col-6">
+                    <a href="{{ route('scan.index_document') }}">
+                        <div class="small-box bg-primary">
+                            <div class="inner">
+                                <h4 class="mb-4">Scan Document</h4>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-solid fa-user"></i>
+                            </div>
+                            <span class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-2 col-6">
+                    <a href="{{ route('scan.index_agunan') }}">
+                        <div class="small-box bg-primary">
+                            <div class="inner">
+                                <h4 class="mb-4">Scan Agunan</h4>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-solid fa-user"></i>
+                            </div>
+                            <span class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-2 col-6">
+                    <a href="{{ route('report.index') }}">
+                        <div class="small-box bg-primary">
+                            <div class="inner">
+                                <h4 class="mb-4">Report</h4>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-solid fa-user"></i>
+                            </div>
+                            <span class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-2 col-6">
+                    <a href="{{ route('history.index') }}">
+                        <div class="small-box bg-primary">
+                            <div class="inner">
+                                <h4 class="mb-4">Changes History</h4>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-solid fa-user"></i>
+                            </div>
+                            <span class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-2 col-6">
+                    <a href="{{ route('document.index') }}">
+                        <div class="small-box bg-primary">
+                            <div class="inner">
+                                <h4 class="mb-4">Document Detail</h4>
                             </div>
                             <div class="icon">
                                 <i class="fas fa-regular fa-folder-open"></i>
@@ -52,13 +113,11 @@
                         </div>
                     </a>
                 </div>
-                <div class="col-lg-3 col-6">
-                    <a href="{{ route('agunan.index') }}">
+                <div class="col-lg-2 col-6">
+                    <a href="{{ route('user.index') }}">
                         <div class="small-box bg-primary">
                             <div class="inner">
-                                <h3>{{ $agunans }}</h3>
-
-                                <strong>Agunan</strong>
+                                <h4 class="mb-4">User List</h4>
                             </div>
                             <div class="icon">
                                 <i class="fas fa-regular fa-file"></i>
@@ -68,13 +127,24 @@
                     </a>
                 </div>
 
-                <div class="col-lg-3 col-6">
-                    <a href="#">
+                <div class="col-lg-2 col-6">
+                    <a href="{{ route('tag.index') }}">
                         <div class="small-box bg-primary">
                             <div class="inner">
-                                <h3>{{ $tags }}</h3>
-
-                                <strong>Tag RFID Remaining</strong>
+                                <h4 class="mb-4">Tag RFID</h4>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-solid fa-tags"></i>
+                            </div>
+                            <span class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-2 col-6">
+                    <a href="{{ route('tag.index') }}">
+                        <div class="small-box bg-primary">
+                            <div class="inner">
+                                <h4 class="mb-4">Location</h4>
                             </div>
                             <div class="icon">
                                 <i class="fas fa-solid fa-tags"></i>

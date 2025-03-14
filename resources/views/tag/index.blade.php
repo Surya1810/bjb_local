@@ -45,11 +45,15 @@
                                             <i class="fa-solid fa-plus"></i> Inject
                                         </button>
                                     @endif
+                                    <a href="{{ route('tag.export') }}"
+                                        class="float-right btn btn-sm btn-primary rounded-partner ml-2">
+                                        <i class="fa-solid fa-file-export"></i> Export
+                                    </a>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body table-responsive">
-                            <table id="rfidTable" class="table table-bordered text-nowrap text-center">
+                            <table id="rfidTable" class="table table-bordered text-nowrap text-center w-100">
                                 <thead class="table-dark">
                                     <tr>
                                         <th style="width: 30%">
@@ -180,17 +184,10 @@
             $('#rfidTable').DataTable({
                 "paging": true,
                 'processing': true,
-                "lengthChange": true,
                 "searching": true,
                 "info": true,
-                "autoWidth": false,
-                "responsive": true,
+                "scrollX": true,
                 "order": [],
-                "columnDefs": [{
-                    "orderable": true,
-                }]
-                // "scrollX": true,
-                // width: "700px",
             });
         });
 

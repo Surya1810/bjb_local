@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('document_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->string('number');
+            $table->string('status')->nullable();
             $table->boolean('is_there')->default(true);
             $table->timestamps();
         });

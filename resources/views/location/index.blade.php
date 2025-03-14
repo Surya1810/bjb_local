@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Location
+    Location List
 @endsection
 
 @push('css')
@@ -36,7 +36,7 @@
                         <div class="card-header">
                             <div class="row align-items-center">
                                 <div class="col-6">
-                                    <h3 class="card-title">Baris</h3>
+                                    <h3 class="card-title">Baris List</h3>
                                 </div>
                                 <div class="col-6 text-right">
                                     <button type="button" class="btn btn-sm btn-primary rounded-partner ml-2"
@@ -48,7 +48,7 @@
                         </div>
 
                         <div class="card-body table-responsive">
-                            <table id="barisTable" class="table table-bordered text-nowrap text-center">
+                            <table id="barisTable" class="table table-bordered text-nowrap text-center rounded-partner">
                                 <thead class="table-dark">
                                     <tr>
                                         <th>Baris</th>
@@ -61,14 +61,15 @@
                                             <tr>
                                                 <td>{{ $location->number }}</td>
                                                 <td>
-                                                    <form action="{{ route('location.destroy', $location->id) }}"
-                                                        method="POST" class="d-inline"
-                                                        onsubmit="return confirm('Are you sure?');">
+                                                    <button type="button" class="btn btn-sm btn-danger rounded-partner"
+                                                        onclick="deleteLocation({{ $location->id }})">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                    <form id="delete-form-{{ $location->id }}"
+                                                        action="{{ route('location.destroy', $location->id) }}"
+                                                        method="POST" style="display: none;">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-danger">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
                                                     </form>
                                                 </td>
                                             </tr>
@@ -86,7 +87,7 @@
                         <div class="card-header">
                             <div class="row align-items-center">
                                 <div class="col-6">
-                                    <h3 class="card-title">Rak</h3>
+                                    <h3 class="card-title">Rak List</h3>
                                 </div>
                                 <div class="col-6 text-right">
                                     <button type="button" class="btn btn-sm btn-primary rounded-partner ml-2"
@@ -98,7 +99,7 @@
                         </div>
 
                         <div class="card-body table-responsive">
-                            <table id="rakTable" class="table table-bordered text-nowrap text-center">
+                            <table id="rakTable" class="table table-bordered text-nowrap text-center rounded-partner">
                                 <thead class="table-dark">
                                     <tr>
                                         <th>Rak</th>
@@ -111,14 +112,15 @@
                                             <tr>
                                                 <td>{{ $location->number }}</td>
                                                 <td>
-                                                    <form action="{{ route('location.destroy', $location->id) }}"
-                                                        method="POST" class="d-inline"
-                                                        onsubmit="return confirm('Are you sure?');">
+                                                    <button type="button" class="btn btn-sm btn-danger rounded-partner"
+                                                        onclick="deleteLocation({{ $location->id }})">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                    <form id="delete-form-{{ $location->id }}"
+                                                        action="{{ route('location.destroy', $location->id) }}"
+                                                        method="POST" style="display: none;">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-danger">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
                                                     </form>
                                                 </td>
                                             </tr>
@@ -136,7 +138,7 @@
     <!-- Modal Add Location -->
     <div class="modal fade" id="addLocation" tabindex="-1" aria-labelledby="addLocationLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+            <div class="modal-content rounded-partner">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addLocationLabel">Add Location</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -145,45 +147,22 @@
                 </div>
                 <form action="{{ route('location.store') }}" method="POST">
                     @csrf
+                    <input type="hidden" id="locationCategory" name="for">
+
                     <div class="modal-body">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="from" class="mb-0 form-label col-form-label-sm">From</label>
-                                    <input class="form-control @error('number_from') is-invalid @enderror" id="number_from"
-                                        name="number_from" placeholder="Input Number" value="{{ old('number_from') }}"
-                                        required type="number">
-                                    @error('from')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="until" class="mb-0 form-label col-form-label-sm">Until</label>
-                                    <input class="form-control @error('number_until') is-invalid @enderror"
-                                        id="number_until" name="number_until" placeholder="Input Number"
-                                        value="{{ old('number_until') }}" required type="number">
-                                    @error('until')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="for">Category</label>
-                                <select name="for" id="locationCategory" class="form-control" required>
-                                    <option value="baris">Baris</option>
-                                    <option value="rak">Rak</option>
-                                </select>
-                            </div>
+                        <div class="form-group">
+                            <label for="number_from">From</label>
+                            <input type="number" class="form-control rounded-partner" id="number_from" name="number_from"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="number_until">Until</label>
+                            <input type="number" class="form-control rounded-partner" id="number_until" name="number_until"
+                                required>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="submit" class="btn btn-primary rounded-partner">Save</button>
                     </div>
                 </form>
             </div>
@@ -192,6 +171,7 @@
 @endsection
 
 @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('assets/adminLTE/plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/adminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('assets/adminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
@@ -203,6 +183,22 @@
 
         function setCategory(category) {
             document.getElementById('locationCategory').value = category;
+        }
+
+        function deleteLocation(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This action cannot be undone!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Delete'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + id).submit();
+                }
+            });
         }
     </script>
 @endpush

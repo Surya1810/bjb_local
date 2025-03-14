@@ -77,15 +77,7 @@
                     <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview"
                         role="menu" data-accordion="false">
                         <li class="nav-item">
-                            <a href="{{ route('home') }}" class="nav-link">
-                                <i class="nav-icon fa-solid fa-house"></i>
-                                <p>
-                                    Home
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('report.index') }}" class="nav-link">
                                 <i class="nav-icon fa-solid fa-chart-simple"></i>
                                 <p>
                                     Report
@@ -112,15 +104,23 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('scan.index') }}" class="nav-link">
+                            <a href="{{ route('scan.index_document') }}" class="nav-link">
                                 <i class="nav-icon fa-solid fa-magnifying-glass"></i>
                                 <p>
-                                    Scan Room
+                                    Scan Document
                                 </p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('scan.index_agunan') }}" class="nav-link">
+                                <i class="nav-icon fa-solid fa-magnifying-glass"></i>
+                                <p>
+                                    Scan Agunan
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('history.index') }}" class="nav-link">
                                 <i class="nav-icon fa-solid fa-clock-rotate-left"></i>
                                 <p>
                                     Changes History

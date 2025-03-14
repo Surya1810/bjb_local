@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Exports\DocumentsExport;
 use App\Imports\DocumentsImport;
 use App\Models\Agunan;
+use App\Models\ChangeHistory;
 use App\Models\Document;
 use App\Models\Location;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -142,7 +145,10 @@ class DocumentController extends Controller
      */
     public function edit(Document $document)
     {
-        //
+        $rows = Location::where('for', 'baris')->orderBy('number', 'asc')->get();
+        $racks = Location::where('for', 'rak')->orderBy('number', 'asc')->get();
+
+        return view('document.edit', compact('document', 'rows', 'racks'));
     }
 
     /**
@@ -150,8 +156,8 @@ class DocumentController extends Controller
      */
     public function update(Request $request, Document $document)
     {
+        // Validasi input
         $request->validate([
-            'tag' => 'required|exists:tags,rfid_number',
             'cif' => 'required',
             'nik' => 'required|max:16',
             'nama' => 'required|string',
@@ -161,7 +167,6 @@ class DocumentController extends Controller
             'pekerjaan' => 'required',
             'alamat' => 'required',
 
-            'dokumen' => 'required|max:255',
             'segmen' => 'required',
             'cabang' => 'required',
             'akad' => 'required|date',
@@ -173,16 +178,9 @@ class DocumentController extends Controller
             'baris' => 'required',
             'rak' => 'required',
             'box' => 'required',
-
-            'agunans' => 'sometimes|array', // Agunans bisa kosong saat update
-            'agunans.*.id' => 'sometimes|exists:agunans,id', // Validasi ID agunan jika ada
-            'agunans.*.rfid_number' => 'required|exists:tags,rfid_number',
-            'agunans.*.name' => 'required|string',
-            'agunans.*.number' => 'required',
         ]);
 
         // Update data dokumen
-        $document->rfid_number = $request->tag;
         $document->cif = $request->cif;
         $document->nik_nasabah = $request->nik;
         $document->nama_nasabah = $request->nama;
@@ -191,7 +189,6 @@ class DocumentController extends Controller
         $document->pekerjaan_nasabah = $request->pekerjaan;
         $document->rekening_nasabah = $request->rekening;
         $document->instansi = $request->instansi;
-        $document->no_dokumen = $request->dokumen;
         $document->segmen = $request->segmen;
         $document->cabang = $request->cabang;
         $document->akad = $request->akad;
@@ -204,37 +201,6 @@ class DocumentController extends Controller
         $document->box = $request->box;
         $document->save();
 
-        // Proses data agunan
-        if ($request->has('agunans')) {
-            $agunanData = $request->input('agunans');
-
-            // Iterasi melalui setiap data agunan yang dikirim dari form
-            foreach ($agunanData as $index => $data) {
-                // Jika ada ID, berarti agunan sudah ada dan perlu diupdate
-                if (isset($data['id'])) {
-                    $agunan = Agunan::find($data['id']);
-
-                    // Jika agunan ditemukan, update datanya
-                    if ($agunan) {
-                        $agunan->rfid_number = $data['rfid_number'];
-                        $agunan->name = $data['name'];
-                        $agunan->number = $data['number'];
-                        $agunan->save();
-                    }
-                }
-                // Jika tidak ada ID, berarti agunan baru dan perlu dibuat
-                else {
-                    $agunan = new Agunan();
-                    $agunan->document_id = $document->id;
-                    $agunan->rfid_number = $data['rfid_number'];
-                    $agunan->name = $data['name'];
-                    $agunan->number = $data['number'];
-                    $agunan->save();
-                }
-            }
-        }
-
-        // Redirect dengan pesan sukses
         return redirect()->route('document.index')->with(['pesan' => 'Document updated successfully', 'level-alert' => 'alert-success']);
     }
 
@@ -278,6 +244,38 @@ class DocumentController extends Controller
 
     public function export()
     {
-        return Excel::download(new DocumentsExport, 'documents.xlsx');
+        $date = date('Y-m-d');
+        $fileName = "document-$date.xlsx";
+
+        return Excel::download(new DocumentsExport, $fileName);
+    }
+
+    public function borrowForm($id)
+    {
+        $document = Document::findOrFail($id);
+        return view('document.borrow', compact('document'));
+    }
+
+    public function borrowStore(Request $request, $id)
+    {
+        $request->validate([
+            'borrowed_by' => 'required|string|max:255',
+        ]);
+
+        $document = Document::findOrFail($id);
+        $document->status = 'Dipinjam oleh ' . $request->borrowed_by;
+        $document->save();
+
+        // Simpan ke Change History (hanya peminjaman, tanpa "Data telah diedit")
+        ChangeHistory::create([
+            'entity_type' => 'document',
+            'no_dokumen' => $document->no_dokumen,
+            'user_id' => Auth::user()->id,
+            'changes' => json_encode([
+                'status' => 'Data dipinjam oleh ' . $request->borrowed_by,
+            ], JSON_PRETTY_PRINT),
+        ]);
+
+        return redirect()->route('document.index')->with('success', 'Dokumen berhasil dipinjam!');
     }
 }
