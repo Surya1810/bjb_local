@@ -8,7 +8,11 @@ use App\Models\Tag;
 use Illuminate\Http\Request;
 use App\Imports\AgunansImport;
 use App\Exports\AgunansExport;
+use App\Exports\FoundAgExport;
+use App\Exports\MissingAgExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 class AgunanController extends Controller
 {
@@ -138,5 +142,31 @@ class AgunanController extends Controller
         $fileName = "agunan-$date.xlsx";
 
         return Excel::download(new AgunansExport, $fileName);
+    }
+
+    public function exportMissing($type)
+    {
+        $data = Agunan::where('is_there', false)->get();
+        $date = Carbon::now()->format('Ymd');
+
+        if ($type === 'pdf') {
+            $pdf = Pdf::loadView('exports.agunan-pdf', compact('data'))->setPaper('a4', 'landscape');
+            return $pdf->download("Berita_Acara_Kehilangan_{$date}.pdf");
+        } else {
+            return Excel::download(new MissingAgExport, "Berita_Acara_Kehilangan_{$date}.xlsx");
+        }
+    }
+
+    public function exportFound($type)
+    {
+        $data = Agunan::where('is_there', true)->get();
+        $date = Carbon::now()->format('Ymd');
+
+        if ($type === 'pdf') {
+            $pdf = Pdf::loadView('exports.agunan-pdf', compact('data'))->setPaper('a4', 'landscape');
+            return $pdf->download("Berita_Acara_Ditemukan_{$date}.pdf");
+        } else {
+            return Excel::download(new FoundAgExport, "Berita_Acara_Ditemukan_{$date}.xlsx");
+        }
     }
 }

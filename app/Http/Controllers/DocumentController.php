@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Exports\DocumentsExport;
+use App\Exports\MissingDocExport;
+use App\Exports\FoundDocExport;
 use App\Imports\DocumentsImport;
 use App\Models\Agunan;
 use App\Models\ChangeHistory;
@@ -11,9 +13,11 @@ use App\Models\Location;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Facades\Excel;
+use Carbon\Carbon;
 
 class DocumentController extends Controller
 {
@@ -249,6 +253,36 @@ class DocumentController extends Controller
 
         return Excel::download(new DocumentsExport, $fileName);
     }
+
+
+
+    public function exportMissing($type)
+    {
+        $data = Document::where('is_there', false)->get();
+        $date = Carbon::now()->format('Ymd');
+
+        if ($type === 'pdf') {
+            $pdf = Pdf::loadView('exports.document-pdf', compact('data'))
+                ->setPaper('a4', 'landscape');
+
+            return $pdf->download("Berita_Acara_Kehilangan_{$date}.pdf");
+        } else {
+            return Excel::download(new MissingDocExport, "Berita_Acara_Kehilangan_{$date}.xlsx");
+        }
+    }
+
+    public function exportFound($type)
+    {
+        $date = Carbon::now()->format('Ymd');
+
+        if ($type === 'pdf') {
+            return Excel::download(new FoundDocExport, "Berita_Acara_Ditemukan_{$date}.pdf", \Maatwebsite\Excel\Excel::DOMPDF);
+        } else {
+            return Excel::download(new FoundDocExport, "Berita_Acara_Ditemukan_{$date}.xlsx");
+        }
+    }
+
+
 
     public function borrowForm($id)
     {

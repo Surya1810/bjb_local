@@ -11,6 +11,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScanController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
+use App\Models\Agunan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -43,11 +44,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/document/{id}/borrow', [DocumentController::class, 'borrowForm'])->name('document.borrow');
     Route::post('/document/{id}/borrow', [DocumentController::class, 'borrowStore'])->name('document.borrow.store');
     Route::delete('/document/{id}/return', [DocumentController::class, 'return'])->name('document.return');
+    Route::get('/documents/export/missing/{type}', [DocumentController::class, 'exportMissing']);
+    Route::get('/documents/export/found/{type}', [DocumentController::class, 'exportFound']);
+
+
 
     // Agunan
     Route::resource('agunan', AgunanController::class);
     Route::post('/agunan/import', [AgunanController::class, 'import'])->name('agunan.import');
     Route::get('/export/agunan', [AgunanController::class, 'export'])->name('agunan.export');
+    Route::get('/agunans/export/missing/{type}', [AgunanController::class, 'exportMissing']);
+    Route::get('/agunans/export/found/{type}', [AgunanController::class, 'exportFound']);
 
 
     // Scan RFID

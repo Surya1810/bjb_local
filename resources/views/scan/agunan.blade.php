@@ -37,14 +37,13 @@
                                 <div class="col-6">
                                     <h3 class="card-title">Agunan List</h3>
                                 </div>
-                                <div class="col-6">
-                                    <div class="float-right">
-                                        <small>Found : <strong id="totalIsThereTrue">0</strong></small>
-                                        <small>Missing : <strong id="totalIsThereFalse">0</strong></small>
-                                    </div>
+                                <div class="col-6 text-right">
+                                    <small>Found: <strong id="totalIsThereTrue">0</strong></small>
+                                    <small>Missing: <strong id="totalIsThereFalse">0</strong></small>
                                 </div>
                             </div>
                         </div>
+                
                         <div class="card-body table-responsive">
                             <table id="agunanTable" class="table table-bordered text-nowrap text-center">
                                 <thead class="table-dark">
@@ -58,22 +57,41 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($agunans as $agunan)
-                                        <tr>
-                                            <td>
-                                                @if ($agunan->is_there)
-                                                    <span class="badge badge-success">Found</span>
-                                                @else
-                                                    <span class="badge badge-danger">Missing</span>
-                                                @endif
-                                            </td>
-                                            <td>{{ $agunan->no_dokumen }}</td>
-                                            <td>{{ $agunan->rfid_number }}</td>
-                                            <td>{{ $agunan->jenis_agunan }}</td>
-                                            <td>{{ $agunan->nomor_agunan }}</td>
-                                        </tr>
+                                    <tr>
+                                        <td>
+                                            @if ($agunan->is_there)
+                                            <span class="badge badge-success">Found</span>
+                                            @else
+                                            <span class="badge badge-danger">Missing</span>
+                                            @endif
+                                        </td>
+                                        <td>{{ $agunan->document_id }}</td>
+                                        <td>{{ $agunan->rfid_number }}</td>
+                                        <td>{{ $agunan->name }}</td>
+                                        <td>{{ $agunan->number }}</td>
+                                    </tr>
                                     @endforeach
                                 </tbody>
                             </table>
+                        </div>
+                
+                        <div class="card-footer text-center">
+                            <div class="btn-group">
+                                <a href="{{ url('/agunans/export/missing/pdf') }}" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-file-pdf"></i> Missing PDF
+                                </a>
+                                <a href="{{ url('/agunans/export/missing/excel') }}" class="btn btn-warning btn-sm">
+                                    <i class="fas fa-file-excel"></i> Missing Excel
+                                </a>
+                            </div>
+                            <div class="btn-group ml-2">
+                                <a href="{{ url('/agunans/export/found/pdf') }}" class="btn btn-success btn-sm">
+                                    <i class="fas fa-file-pdf"></i> Found PDF
+                                </a>
+                                <a href="{{ url('/agunans/export/found/excel') }}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-file-excel"></i> Found Excel
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

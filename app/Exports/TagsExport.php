@@ -12,8 +12,6 @@ use Maatwebsite\Excel\Events\AfterSheet;
 
 class TagsExport implements FromCollection, WithHeadings, WithStyles, WithEvents
 {
-
-
     public function collection()
     {
         return Tag::select('rfid_number', 'status', 'created_at')
@@ -31,54 +29,40 @@ class TagsExport implements FromCollection, WithHeadings, WithStyles, WithEvents
     {
         return [
             ["Laporan Data Tag RFID"],
-            [
-                'RFID Number',
-                'Status',
-                'Created At',
-            ]
+            ['RFID Number', 'Status', 'Created At']
         ];
     }
 
     public function styles(Worksheet $sheet)
     {
-        // Styling judul dokumen
-        $sheet->mergeCells('A1:W1'); // Menggabungkan sel untuk judul
-        $sheet->getStyle('A1')->applyFromArray([
-            'font' => ['bold' => true, 'size' => 14],
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
-            ]
-        ]);
+        $lastColumn = 'C';
 
-        // Styling header tabel
-        $sheet->getStyle('A2:W2')->applyFromArray([
+        $sheet->mergeCells("A1:$lastColumn" . "1")
+            ->getStyle("A1")->applyFromArray([
+                'font' => ['bold' => true, 'size' => 14],
+                'alignment' => ['horizontal' => 'center', 'vertical' => 'center']
+            ]);
+
+        $sheet->getStyle("A2:$lastColumn" . "2")->applyFromArray([
             'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'startColor' => ['rgb' => '4F81BD'] // Warna biru tua untuk header
-            ],
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
-            ]
+            'fill' => ['fillType' => 'solid', 'startColor' => ['rgb' => '4F81BD']],
+            'alignment' => ['horizontal' => 'center', 'vertical' => 'center']
         ]);
 
-        // Auto-size column
-        foreach (range('A', 'W') as $columnID) {
-            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        foreach (range('A', $lastColumn) as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
         }
 
-        // Wrap text untuk alamat agar tidak kepanjangan
-        $sheet->getStyle('E:E')->getAlignment()->setWrapText(true);
+        $sheet->getStyle("A2:$lastColumn" . $sheet->getHighestRow())->applyFromArray([
+            'borders' => ['allBorders' => ['borderStyle' => 'thin', 'color' => ['rgb' => '000000']]]
+        ]);
     }
 
     public function registerEvents(): array
     {
         return [
-            AfterSheet::class => function (AfterSheet $event) {
-                $event->sheet->getDelegate()->getRowDimension(1)->setRowHeight(25); // Atur tinggi baris judul
-            },
+            AfterSheet::class => fn(AfterSheet $event) =>
+            $event->sheet->getDelegate()->getDefaultRowDimension()->setRowHeight(-1)
         ];
     }
 }

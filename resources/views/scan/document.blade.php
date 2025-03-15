@@ -37,53 +37,28 @@
                                 <div class="col-6">
                                     <h3 class="card-title">Document List</h3>
                                 </div>
-                                <div class="col-6">
-                                    <div class="float-right">
-                                        <small>Found : <strong id="totalIsThereTrue">0</strong>
-                                        </small>
-                                        <small>Missing : <strong id="totalIsThereFalse">0</strong>
-                                        </small>
-                                    </div>
+                                <div class="col-6 text-right">
+                                    <small>Found: <strong id="totalIsThereTrue">0</strong></small>
+                                    <small>Missing: <strong id="totalIsThereFalse">0</strong></small>
                                 </div>
                             </div>
                         </div>
+                
                         <div class="card-body table-responsive">
                             <table id="documentTable" class="table table-bordered text-nowrap text-center">
                                 <thead class="table-dark">
                                     <tr>
-                                        <th rowspan="2" class="align-middle">
-                                            Status
-                                        </th>
-                                        <th rowspan="2" class="align-middle">
-                                            RFID
-                                        </th>
-                                        <th rowspan="2" class="align-middle">
-                                            CIF
-                                        </th>
-                                        <th rowspan="2" class="align-middle">
-                                            NIK
-                                        </th>
-                                        <th rowspan="2" class="align-middle">
-                                            Rekening
-                                        </th>
-                                        <th rowspan="2" class="align-middle">
-                                            Nama
-                                        </th>
-                                        <th rowspan="2" class="align-middle">
-                                            Cabang
-                                        </th>
-                                        <th rowspan="2" class="align-middle">
-                                            Dokumen
-                                        </th>
-                                        <th rowspan="2" class="align-middle">
-                                            Segmen
-                                        </th>
-                                        <th rowspan="2" class="align-middle">
-                                            Nilai
-                                        </th>
-                                        <th colspan="4" class="align-middle">
-                                            Location
-                                        </th>
+                                        <th rowspan="2" class="align-middle">Status</th>
+                                        <th rowspan="2" class="align-middle">RFID</th>
+                                        <th rowspan="2" class="align-middle">CIF</th>
+                                        <th rowspan="2" class="align-middle">NIK</th>
+                                        <th rowspan="2" class="align-middle">Rekening</th>
+                                        <th rowspan="2" class="align-middle">Nama</th>
+                                        <th rowspan="2" class="align-middle">Cabang</th>
+                                        <th rowspan="2" class="align-middle">Dokumen</th>
+                                        <th rowspan="2" class="align-middle">Segmen</th>
+                                        <th rowspan="2" class="align-middle">Nilai</th>
+                                        <th colspan="4" class="align-middle">Location</th>
                                     </tr>
                                     <tr>
                                         <th>Ruangan</th>
@@ -96,6 +71,25 @@
                                     <!-- Data Asset masuk real-time -->
                                 </tbody>
                             </table>
+                        </div>
+                
+                        <div class="card-footer text-center">
+                            <div class="btn-group">
+                                <a href="{{ url('/documents/export/missing/pdf') }}" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-file-pdf"></i> Missing PDF
+                                </a>
+                                <a href="{{ url('/documents/export/missing/excel') }}" class="btn btn-warning btn-sm">
+                                    <i class="fas fa-file-excel"></i> Missing Excel
+                                </a>
+                            </div>
+                            <div class="btn-group ml-2">
+                                <a href="{{ url('/documents/export/found/pdf') }}" class="btn btn-success btn-sm">
+                                    <i class="fas fa-file-pdf"></i> Found PDF
+                                </a>
+                                <a href="{{ url('/documents/export/found/excel') }}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-file-excel"></i> Found Excel
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
