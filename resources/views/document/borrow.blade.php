@@ -38,7 +38,7 @@
                                             Peminjam</label>
                                         <input class="form-control @error('borrowed_by') is-invalid @enderror"
                                             id="borrowed_by" name="borrowed_by" placeholder="Tulis nama peminjam"
-                                            value="{{ old('borrowed_by') }}" required type="text">
+                                            value="{{ old('borrowed_by', $document->borrowed_by) }}" required type="text">
                                         @error('borrowed_by')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -48,10 +48,26 @@
                                 </div>
                             </div>
                             <div class="card-footer rounded-partner">
+                                @if (!Str::startsWith($document->status, 'Dipinjam oleh'))
                                 <a href="{{ route('document.index') }}" class="btn btn-secondary rounded-partner">Batal</a>
+                                
                                 <button type="submit" class="btn btn-warning rounded-partner">Pinjam</button>
+                                @endif
                             </div>
-                        </form>
+                            </form>
+                            
+                            
+                            <div class="card-footer rounded-partner">
+                                @if (Str::startsWith($document->status, 'Dipinjam oleh'))
+                                <a href="{{ route('document.index') }}" class="btn btn-secondary rounded-partner">Batal</a>
+                                <form id="delete-form-{{ $document->id }}" action="{{ route('document.return', $document->id) }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" class="btn btn-danger rounded-partner" onclick="deleteBorrow({{ $document->id }})">Hapus</button>
+                                </form>
+                                @endif
+                            </div>
+                            
                     </div>
                 </div>
             </div>
@@ -60,4 +76,23 @@
 @endsection
 
 @push('scripts')
+<script src="{{ asset('assets/adminLTE/plugins/inputmask/jquery.inputmask.min.js') }}"></script>
+
+<script type="text/javascript">
+    function deleteBorrow(id) {
+    Swal.fire({
+    title: 'Are you sure?',
+    text: "This action cannot be undone!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Delete!'
+    }).then((result) => {
+    if (result.isConfirmed) {
+    document.getElementById('delete-form-' + id).submit();
+    }
+    });
+    }
+</script>
 @endpush

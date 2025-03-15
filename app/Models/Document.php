@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -50,25 +51,32 @@ class Document extends Model
 
             foreach ($changes as $key => $newValue) {
                 $oldValue = $original[$key] ?? 'kosong';
+                if ($key === 'status') {
 
-                // Jika yang diubah adalah status & status baru berisi "Dipinjam oleh"
-                if ($key == 'status' && str_contains($newValue, 'Dipinjam oleh')) {
-                    $formattedChanges['status'] = $newValue; // Simpan status "Dipinjam oleh ..."
-                } else {
-                    $formattedChanges[$key] = "diubah dari '$oldValue' menjadi '$newValue'";
+                    if (Str::startsWith($newValue, 'Dipinjam oleh')) {
+                        return;
+                    }
+
+                    if ($newValue === '-') {
+                        return;
+                    }
                 }
+                $formattedChanges[$key] = "diubah dari '$oldValue' menjadi '$newValue'";
             }
 
-            ChangeHistory::create([
-                'entity_type' => 'document',
-                'no_dokumen' => $document->no_dokumen,
-                'user_id' => Auth::user()->id,
-                'changes' => json_encode([
-                    'status' => 'Data telah diedit',
-                    'changes' => $formattedChanges,
-                ], JSON_PRETTY_PRINT),
-            ]);
+            if (!empty($formattedChanges)) {
+                ChangeHistory::create([
+                    'entity_type' => 'document',
+                    'no_dokumen' => $document->no_dokumen,
+                    'user_id' => Auth::user()->id,
+                    'changes' => json_encode([
+                        'status' => 'Data telah diedit',
+                        'changes' => $formattedChanges,
+                    ], JSON_PRETTY_PRINT),
+                ]);
+            }
         });
+
 
         // Event: Saat data dihapus
         static::deleted(function ($document) {

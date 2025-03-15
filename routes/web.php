@@ -42,6 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/export/documents', [DocumentController::class, 'export'])->name('document.export');
     Route::get('/document/{id}/borrow', [DocumentController::class, 'borrowForm'])->name('document.borrow');
     Route::post('/document/{id}/borrow', [DocumentController::class, 'borrowStore'])->name('document.borrow.store');
+    Route::delete('/document/{id}/return', [DocumentController::class, 'return'])->name('document.return');
 
     // Agunan
     Route::resource('agunan', AgunanController::class);

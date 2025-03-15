@@ -253,6 +253,9 @@ class DocumentController extends Controller
     public function borrowForm($id)
     {
         $document = Document::findOrFail($id);
+        $document->borrowed_by = $document->status && str_starts_with($document->status, 'Dipinjam oleh')
+            ? str_replace('Dipinjam oleh ', '', $document->status)
+            : '';
         return view('document.borrow', compact('document'));
     }
 
@@ -277,5 +280,24 @@ class DocumentController extends Controller
         ]);
 
         return redirect()->route('document.index')->with('success', 'Dokumen berhasil dipinjam!');
+    }
+
+    public function return($id)
+    {
+        $document = Document::findOrFail($id);
+
+        $document->status = '-';
+        $document->save();
+
+        ChangeHistory::create([
+            'entity_type' => 'document',
+            'no_dokumen' => $document->no_dokumen,
+            'user_id' => Auth::user()->id,
+            'changes' => json_encode([
+                'status' => 'Document telah dikembalikan',
+            ], JSON_PRETTY_PRINT),
+        ]);
+
+        return redirect()->route('document.index')->with('success', 'Peminjaman dikembalikan.');
     }
 }
